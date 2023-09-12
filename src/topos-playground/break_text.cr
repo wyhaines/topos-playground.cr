@@ -1,0 +1,76 @@
+class ToposPlayground
+  def self.break_text(str : String, max_line_length : Int32 = 80) : String
+    return str if max_line_length <= 0
+
+    # Split the string into words to calculate word length statistics
+    words = str.split(' ')
+    word_lengths = words.map { |word| word.size }
+
+    # Calculate average word length
+    average = word_lengths.sum.to_f / word_lengths.size
+
+    # Calculate standard deviation of word length
+    sum_of_squared_differences = word_lengths.reduce(0.0) { |sum, length| sum + (length - average)**2 }
+    standard_deviation = Math.sqrt(sum_of_squared_differences / word_lengths.size)
+
+    # Determine the maximum word length to allow before breaking
+    max_word_length = [max_line_length, average + standard_deviation].min
+
+    lines = [] of String
+    line = ""
+    word = ""
+    indentation = ""
+    has_determined_indentation = false
+
+    str.chars.each_with_index do |char, i|
+      word += char
+
+      if char.whitespace? || i == str.size - 1
+        unless has_determined_indentation
+          indentation += char
+        end
+        if line.size + word.size < max_line_length
+          line += word
+          word = ""
+        else
+          if line.size + word.size > max_line_length && word.size > max_word_length
+            first_character = word[0]
+            minsplit = [2, (word.size * 0.3).floor].max
+            maxsplit = [word.size - 3, (word.size * 0.7).ceil].min
+            middle = max_line_length - line.size - 1
+            if first_character != first_character.upcase && first_character != first_character.downcase && word.size > max_word_length && middle > minsplit && middle < maxsplit
+              part = word[0...middle]
+              remaining = word[middle..]
+              lines << (line + part + (remaining.size > 0 ? "-" : ""))
+              line = indentation + remaining
+              word = ""
+            else
+              lines << line.rstrip
+              line = indentation + word
+              word = ""
+            end
+          else
+            lines << line.rstrip
+            line = indentation + word
+            word = ""
+          end
+        end
+        if char == '\n'
+          lines << line.rstrip
+          line = ""
+          indentation = ""
+          has_determined_indentation = false
+        else
+          if line.size >= max_line_length || i == str.size - 1
+            lines << line.rstrip
+            line = ""
+          end
+        end
+      else
+        has_determined_indentation = true
+      end
+    end
+    lines << line unless line.empty?
+    lines.join('\n')
+  end
+end

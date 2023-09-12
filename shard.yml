@@ -1,0 +1,25 @@
+name: topos-playground.cr
+version: 0.1.0
+
+authors:
+  - Kirk Haines <wyhaines@gmail.com>
+
+targets:
+  topos-playground:
+    main: src/topos-playground.cr
+
+crystal: ">1.9.1"
+
+license: "Apache 2.0"
+
+dependencies:
+  tput:
+    github: crystallabs/tput.cr
+    version: ~> 1.0
+  csuuid:
+    github: wyhaines/csuuid.cr
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: ~> 1.5.0
