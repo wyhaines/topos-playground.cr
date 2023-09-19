@@ -18,7 +18,7 @@ class ToposPlayground
       @config = config
     end
 
-    def run(command, chdir = ".")
+    def self.run_process(command, chdir = ".", env = ENV)
       stdout = IO::Memory.new
       stderr = IO::Memory.new
       status = Process.run(
@@ -29,6 +29,10 @@ class ToposPlayground
         chdir: chdir.to_s)
 
       {status, stdout, stderr}
+    end
+
+    def run_process(command, chdir = ".", env = ENV)
+      self.class.run_process(command, chdir, env)
     end
   end
 end

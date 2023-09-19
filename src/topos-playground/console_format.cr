@@ -17,8 +17,9 @@ class ToposPlayground
   struct StdoutConsoleFormat < Log::StaticFormatter
     def run
       string ToposPlayground.break_text(
-        "    #{@entry.message.colorize(:green)}",
-        ToposPlayground.terminal_width)
+        @entry.message,
+        ToposPlayground.terminal_width
+      ).colorize(:green).to_s
     end
   end
 end

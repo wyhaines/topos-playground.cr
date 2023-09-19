@@ -8,10 +8,10 @@ class ToposPlayground
 
     def content
       <<-EENV
-        PORT=3001
-        AUTH0_AUDIENCE=https://executor.demo.toposware.com
-        AUTH0_ISSUER_URL=https://dev-z8x4rhzfosi03fqx.us.auth0.com
-        EENV
+      PORT=3001
+      AUTH0_AUDIENCE=https://executor.demo.toposware.com
+      AUTH0_ISSUER_URL=https://dev-z8x4rhzfosi03fqx.us.auth0.com
+      EENV
     end
   end
 end

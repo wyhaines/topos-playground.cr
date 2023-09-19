@@ -14,14 +14,14 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
   def verify_working_directory
     if File.exists?("#{config.working_dir}") && File.directory?("#{config.working_dir}") && File.writable?("#{config.working_dir}")
       if Dir["#{config.working_dir}/*"].empty?
-        Log.for("stdout").info { "Working directory (#{config.working_dir}) is empty" }
+        Log.for("stdout").info { "✅ Working directory (#{config.working_dir}) is empty" }
       else
-        Log.for("stdout").info { "Found working directory (#{config.working_dir})" }
+        Log.for("stdout").info { "✅ Found working directory (#{config.working_dir})" }
       end
       config.working_dir_exists = true
     else
       if !File.exists?("#{config.working_dir}")
-        Log.for("stdout").info { "Working directory (#{config.working_dir}) does not exist. Perhaps it was already cleaned?" }
+        Log.for("stdout").info { "✅ Working directory (#{config.working_dir}) does not exist. Perhaps it was already cleaned?" }
       elsif !File.directory?("#{config.working_dir}")
         Error.error { "Working directory (#{config.working_dir}) is not a directory. Can not continue!" }
         exit 1
@@ -36,14 +36,14 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
   def verify_execution_path
     if File.exists?("#{config.execution_path}") && File.directory?("#{config.execution_path}") && File.readable?("#{config.execution_path}")
       if Dir["#{config.execution_path}/*"].empty?
-        Log.for("stdout").info { "Execution path (#{config.execution_path}) is empty\n" }
+        Log.for("stdout").info { "✅ Execution path (#{config.execution_path}) is empty\n" }
       else
-        Log.for("stdout").info { "Found execution path (#{config.execution_path})\n" }
+        Log.for("stdout").info { "✅ Found execution path (#{config.execution_path})\n" }
       end
       config.execution_path_exists = true
     else
       if !File.exists?("#{config.execution_path}")
-        Log.for("stdout").info { "Execution path (#{config.execution_path}) does not exist. Can not shut down any running containers.\n" }
+        Log.for("stdout").info { "✅ Execution path (#{config.execution_path}) does not exist. Can not shut down any running containers.\n" }
       elsif !File.directory?("#{config.execution_path}")
         Error.error { "Execution path (#{config.execution_path}) is not a directory. Can not continue!" }
         exit 1
@@ -66,11 +66,11 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
 
   private def shutdown_docker_compose
     command = "docker compose down -v"
-    status, _, stderr = run(
+    status, stdout, stderr = run_process(
       command,
       config.execution_path.to_s)
     if status.success?
-      Log.for("stdout").info { "✅ subnets & TCE are down\n" }
+      Log.for("stdout").info { "✅ subnets & TCE are down" }
     else
       Error.error { "Failed to shut down ERC20 messaging protocol infrastructure: #{stderr}" }
       exit 1
@@ -82,12 +82,12 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
 
   def shutdown_redis
     redis_container_name = "redis-stack-server"
-    status, stdout, stderr = run("docker ps --format '{{.Names}}'")
+    status, stdout, stderr = run_process("docker ps --format '{{.Names}}'")
     if status.success?
       if stdout.to_s.includes?(redis_container_name)
         Log.for("stdout").info { "Shutting down the redis container..." }
         command = "docker rm -f #{redis_container_name}"
-        status, _, stderr = run(command)
+        status, _, stderr = run_process(command)
 
         if status.success?
           Log.for("stdout").info { "✅ redis is down\n" }
@@ -109,17 +109,17 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
   def remove_working_directory
     if config.working_dir_exists?
       Log.for("stdout").info { "Cleaning up the working directory (#{config.working_dir})..." }
-      status, _, stderr = run("rm -rf #{config.working_dir}")
+      status, stdout, stderr = run_process("rm -rf #{config.working_dir}")
       if status.success?
         Log.for("stdout").info { "✅ Working directory has been removed" }
       else
-        Error.error { "Failed to clean up the working directory (#{config.working_dir}): #{stderr}" }
+        Error.error { "Failed to clean up the working directory (#{config.working_dir}): #{stderr}\n#{caller.join("\n")}" }
       end
     else
       Log.for("stdout").info { "✅ Working directory (#{config.working_dir}) does not exist" }
     end
   rescue ex
-    Error.error { "Failed to clean up the working directory (#{config.working_dir}): #{ex}" }
+    Error.error { "XFailed to clean up the working directory (#{config.working_dir}): #{ex}\n#{caller.join("\n")}" }
     exit 1
   end
 end

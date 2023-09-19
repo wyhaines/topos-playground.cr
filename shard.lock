@@ -16,6 +16,10 @@ shards:
     git: https://github.com/crystal-posix/ioctl.cr.git
     version: 1.0.0
 
+  nbchannel:
+    git: https://github.com/wyhaines/nbchannel.cr.git
+    version: 0.1.0
+
   parse_date:
     git: https://github.com/wyhaines/parsedate.cr.git
     version: 0.1.2

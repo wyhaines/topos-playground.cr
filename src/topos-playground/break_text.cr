@@ -26,51 +26,62 @@ class ToposPlayground
       word += char
 
       if char.whitespace? || i == str.size - 1
-        unless has_determined_indentation
+        if char != '\n' && !has_determined_indentation
           indentation += char
         end
         if line.size + word.size < max_line_length
           line += word
           word = ""
         else
-          if line.size + word.size > max_line_length && word.size > max_word_length
-            first_character = word[0]
-            minsplit = [2, (word.size * 0.3).floor].max
-            maxsplit = [word.size - 3, (word.size * 0.7).ceil].min
-            middle = max_line_length - line.size - 1
-            if first_character != first_character.upcase && first_character != first_character.downcase && word.size > max_word_length && middle > minsplit && middle < maxsplit
-              part = word[0...middle]
-              remaining = word[middle..]
-              lines << (line + part + (remaining.size > 0 ? "-" : ""))
-              line = indentation + remaining
-              word = ""
-            else
-              lines << line.rstrip
-              line = indentation + word
-              word = ""
-            end
-          else
-            lines << line.rstrip
-            line = indentation + word
-            word = ""
+          while line.size + word.size >= max_line_length
+            line, word = break_line(lines, line, word, max_line_length, max_word_length, indentation)
           end
         end
         if char == '\n'
-          lines << line.rstrip
+          lines << line
           line = ""
           indentation = ""
           has_determined_indentation = false
         else
           if line.size >= max_line_length || i == str.size - 1
-            lines << line.rstrip
+            lines << line
             line = ""
           end
         end
       else
         has_determined_indentation = true
       end
+      lines.join
+    end
+    while line.size + word.size >= max_line_length
+      line, word = break_line(lines, line, word, max_line_length, max_word_length, indentation)
     end
     lines << line unless line.empty?
-    lines.join('\n')
+    lines.join
+  end
+
+  def self.break_line(lines, line, word, max_line_length, max_word_length, indentation)
+    if line.size + word.size > max_line_length && word.size > max_word_length
+      first_character = word[0]
+      minsplit = [2, (word.size * 0.3).floor].max
+      maxsplit = [word.size - 3, (word.size * 0.7).ceil].min
+      middle = max_line_length - line.size - 1
+      if first_character != first_character.upcase && first_character != first_character.downcase && word.size > max_word_length && middle > minsplit && middle < maxsplit
+        part = word[0...middle]
+        remaining = word[middle..]
+        lines << "#{line}#{part}#{remaining.size > 0 ? "-" : ""}\n"
+        line = indentation + remaining
+        word = ""
+      else
+        lines << line + '\n'
+        line = indentation + word
+        word = ""
+      end
+    else
+      lines << line + '\n'
+      line = indentation + word
+      word = ""
+    end
+    {line, word}
   end
 end

@@ -3,6 +3,7 @@ require "csuuid"
 class ToposPlayground
   def initialize_directories
     config.home = ENV["HOME"]? || "."
+    config.cache_home = ENV["XDG_CACHE_HOME"]? || File.join(config.home.as(String), ".cache")
     config.data_home = ENV["XDG_DATA_HOME"]? || File.join(config.home.as(String), ".local", "share")
     config.state_home = ENV["XDG_STATE_HOME"]? || File.join(config.home.as(String), ".local", "state")
 
@@ -10,6 +11,7 @@ class ToposPlayground
     config.log_dir = File.join(config.state_home.as(String), "topos-playground", "logs")
     config.log_file_path = File.join(config.log_dir.as(String), "log-#{CSUUID.new}.log")
     config.execution_path = File.join(config.working_dir.as(String), "local-erc20-messaging-infra")
+    config.cache_dir = File.join(config.cache_home.as(String), "topos-playground")
 
     Dir.mkdir_p(config.working_dir.as(String)) rescue mkdir_error(config.working_dir)
     Dir.mkdir_p(config.log_dir.as(String)) rescue mkdir_error(config.log_dir)
