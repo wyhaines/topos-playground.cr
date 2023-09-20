@@ -4,10 +4,6 @@ shards:
     git: https://github.com/crystal-ameba/ameba.git
     version: 1.5.0
 
-  crystallabs-helpers:
-    git: https://github.com/crystallabs/crystallabs-helpers.cr.git
-    version: 1.0.1
-
   csuuid:
     git: https://github.com/wyhaines/csuuid.cr.git
     version: 1.0.0
@@ -31,16 +27,4 @@ shards:
   time-ext:
     git: https://github.com/wyhaines/time-ext.cr.git
     version: 0.1.0+git.commit.175f658235fb6cdc9c804cb96da510fec27f4cd6
-
-  tput:
-    git: https://github.com/crystallabs/tput.cr.git
-    version: 1.0.7
-
-  unibilium:
-    git: https://github.com/crystallabs/unibilium.cr.git
-    version: 1.0.1
-
-  unibilium-shim:
-    git: https://github.com/crystallabs/unibilium-shim.cr.git
-    version: 1.1.0
 

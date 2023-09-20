@@ -13,9 +13,8 @@ crystal: ">1.9.1"
 license: "Apache 2.0"
 
 dependencies:
-  tput:
-    github: crystallabs/tput.cr
-    version: ~> 1.0
+  term-screen:
+    github: crystal-term/screen
   csuuid:
     github: wyhaines/csuuid.cr
   nbchannel:

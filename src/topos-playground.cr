@@ -1,6 +1,6 @@
-require "tput"
-require "./topos-playground/*"
+require "term-screen"
 require "file_utils"
+require "./topos-playground/*"
 
 class Log::Builder
   def each_log(&)
@@ -15,7 +15,7 @@ end
 
 class ToposPlayground
   @@terminal_width = -1
-  @@tput : Tput::Namespace::Size? = nil
+  # @@tput : Tput::Namespace::Size? = nil
 
   property config : ToposPlayground::Config = ToposPlayground::Config.new
 
@@ -26,25 +26,24 @@ class ToposPlayground
   end
 
   def self.determine_terminal_width
-    if path = Process.find_executable("stty")
-      begin
-        stdout = `stty size`
-        cols = stdout.to_s.split(/\s+/)[1]?.to_s.to_i
-        return cols
-      rescue ex
-      end
-    end
+    Term::Screen.size[1]
+    # if path = Process.find_executable("stty")
+    #   begin
+    #     stdout = `stty size`
+    #     cols = stdout.to_s.split(/\s+/)[1]?.to_s.to_i
+    #     return cols
+    #   rescue ex
+    #   end
+    # end
 
-    if path = Process.find_executable("tput")
-      begin
-        stdout = `tput cols`
-        pp stdout.to_s
-        return stdout.to_s.chomp.to_i
-      rescue ex
-      end
-    end
-
-    (@@tput ||= Tput.new.screen).not_nil!.width
+    # if path = Process.find_executable("tput")
+    #   begin
+    #     stdout = `tput cols`
+    #     pp stdout.to_s
+    #     return stdout.to_s.chomp.to_i
+    #   rescue ex
+    #   end
+    # end
   end
 
   def initialize

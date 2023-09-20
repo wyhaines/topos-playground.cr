@@ -2,7 +2,6 @@ require "../env"
 
 class ToposPlayground
   struct Env::Secrets < Env
-
     KeyHash = {
       "PRIVATE_KEY"             => "0xd7e2e00b43c12cf17239d4755ed744df6ca70a933fc7c8bbb7da1342a5ff2e38",
       "TOKEN_DEPLOYER_SALT"     => "m1Ln9uF9MGZ2PcR",
@@ -21,7 +20,7 @@ class ToposPlayground
     def content
       String.build do |str|
         KeyHash.each do |key, value|
-          str << "#{key}=#{value}\n"
+          str << "export #{key}=#{value}\n"
         end
       end
     end

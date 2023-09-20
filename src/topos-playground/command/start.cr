@@ -34,6 +34,8 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   }
 
   def run
+    background_processes = [] of Tuple(Channel(Bool), Process)
+
     Log.for("stdout").info { "Starting Topos-Playground...\n" }
 
     verify_dependency_installation
@@ -43,9 +45,10 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     run_redis
     run_local_erc20_messaging_infra
     retrieve_and_write_contract_addresses_to_env
-    run_executor_service
+    background_processes << run_executor_service
     run_dapp_frontend_service
     completion_banner
+    wait_for background_processes
   end
 
   def verify_dependency_installation
@@ -108,7 +111,6 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     exit 1
   end
 
-  # TODO: If a cache for the github repos is implemented, then the tool could spin up a local devnet without requiring an internet connection.
   def clone_git_repositories
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Cloning git repositories..." }
@@ -135,15 +137,14 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   end
 
   def update_repository(repo_path)
-    Log.for("stdout").info { "  Updating cached github repository: #{repo_path}" }
     status, stdout, stderr = run_process(
       "git pull",
       repo_path)
 
     if status.success?
-      Log.for("stdout").info { "  ✅ Respository is up-to-date" }
+      Log.for("stdout").info { "✅ Respository is up-to-date" }
     else
-      Log.for("stdout").info { "  ❌ Repository update failed: #{stdout}\n#{stderr}" }
+      Log.for("stdout").info { "❌ Repository update failed: #{stdout}\n#{stderr}" }
     end
   rescue ex
     Error.error { "Repository update failed: #{ex.message}" }
@@ -190,13 +191,16 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     path.to_s.gsub(/WORKINGDIR/, config.working_dir.to_s)
   end
 
+  def shell
+    ["bash", "zsh"].map { |exe| Process.find_executable(exe) }.compact[0]? || "/bin/bash"
+  end
+
   def run_local_erc20_messaging_infra
-    Fiber.yield
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Running the ERC20 messaging infrastructures..." }
 
     status, stdout, stderr = run_process(
-      %(/bin/bash -c "source #{config.working_dir}/.env.secrets && docker compose up -d"),
+      %(#{shell} -c "source #{config.working_dir}/.env.secrets && docker compose up -d"),
       chdir: config.execution_path.to_s,
       env: EnvRegistry["secrets"].new.env)
 
@@ -211,7 +215,6 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   end
 
   def retrieve_and_write_contract_addresses_to_env
-    Fiber.yield
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Retrieving contract addresses..." }
     status, stdout, stderr = run_process(
@@ -219,13 +222,31 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
       env: EnvRegistry["secrets"].new.env
     )
 
-    pp parse_contract_addresses_to_hash("#{config.working_dir}/.env.addresses")
+    env_hash = parse_contract_addresses_to_hash("#{config.working_dir}/.env.addresses")
+
+    File.open(
+      sub_working_dir(EnvRegistry["dappfrontend"].new.path),
+      "a+") do |fh|
+      fh.puts "VITE_SUBNET_REGISTRATOR_CONTRACT_ADDRESS=#{env_hash["SUBNET_REGISTRATOR_CONTRACT_ADDRESS"]}"
+      fh.puts "VITE_TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
+      fh.puts "VITE_ERC20_MESSAGING_CONTRACT_ADDRESS=#{env_hash["ERC20_MESSAGING_CONTRACT_ADDRESS"]}"
+    end
+    Log.for("stdout").info { "✅ Contract addresses successfully written to #{EnvRegistry["dappfrontend"].new.path}" }
+
+    File.open(
+      sub_working_dir(EnvRegistry["executorservice"].new.path),
+      "a+") do |fh|
+      fh.puts "SUBNET_REGISTRATOR_CONTRACT_ADDRESS=#{env_hash["SUBNET_REGISTRATOR_CONTRACT_ADDRESS"]}"
+      fh.puts "TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
+    end
+    Log.for("stdout").info { "✅ Contract addresses successfully written to #{EnvRegistry["executorservice"].new.path}" }
   end
 
   def parse_contract_addresses_to_hash(filename)
     result = {} of String => String
     File.open(filename, "r") do |fh|
       fh.each_line do |line|
+        next if line.strip.empty?
         matches = line.gsub(/export\s+/, "").split(/=/)
         result[matches[0]] = matches[1]
       end
@@ -251,12 +272,49 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     Error.error { "Failed to start the redis server: #{ex.message}" }
   end
 
+  def do_npm_install(path)
+    npm = Process.find_executable("npm") || "npm"
+
+    status, stdout, stderr = run_process(
+      "#{npm} install",
+      chdir: path
+    )
+
+    if status.success?
+      Log.for("stdout").info { "✅ Dependencies are installed" }
+    else
+      Error.error { "#{status.exit_reason}: Failed to install dependencies: #{stderr}" }
+      exit status.exit_code
+    end
+  rescue ex
+    Error.error { "Failed to install dependencies: #{ex.message}" }
+  end
+
+  def start_executor_service(secrets_path, executor_service_path) : Tuple(Channel(Bool), Process)
+    kill_channel, process = run_process(
+      %(#{shell} -c "source #{secrets_path} && npm start"),
+      chdir: executor_service_path,
+      env: nil,
+      background: true
+    )
+
+    Log.for("stdout").info { "✅ Executor Service is running" }
+
+    {kill_channel, process}
+  end
+
   def run_executor_service
-    Fiber.yield
+    Log.for("stdout").info { "" }
+    Log.for("stdout").info { "Running the Executor Service..." }
+
+    secrets_path = File.join(config.working_dir.to_s, ".env.secrets")
+    executor_service_path = File.join(config.working_dir.to_s, "executor-service")
+
+    do_npm_install(executor_service_path)
+    start_executor_service(secrets_path, executor_service_path)
   end
 
   def run_dapp_frontend_service
-    Fiber.yield
   end
 
   def completion_banner
@@ -273,5 +331,25 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     EBANNER
 
     Log.for("stdout").info { banner }
+  end
+
+  def wait_for(background_processes)
+    # TODO: Have a command line flag so that the CLI _does not_ block on the
+    # execution of the executor or the dapp frontend. Also add a cleanup
+    # phase to reap any executor or dapp frontend that may be running
+
+    at_exit do
+      background_processes.each do |background_process|
+        channel, process = background_process
+        process.terminate
+        channel.send(true)
+      end
+    end
+
+    background_processes.each do |background_process|
+      channel, process = background_process
+      process.wait
+      channel.send(true)
+    end
   end
 end

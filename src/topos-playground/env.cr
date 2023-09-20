@@ -18,7 +18,7 @@ class ToposPlayground
         env[key] = value
       end
 
-      env
+      env.to_h
     end
   end
 end
