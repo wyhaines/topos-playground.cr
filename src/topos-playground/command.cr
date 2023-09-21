@@ -26,6 +26,7 @@ class ToposPlayground
       output = IO::Stapled.new(*IO.pipe)
       process = Process.new(
         command,
+        shell: true,
         chdir: chdir.to_s,
         output: output,
         error: output,
@@ -35,14 +36,14 @@ class ToposPlayground
       spawn(name: "kill-monitor #{command}") do
         kill_channel.receive
 
-        Log.for("stdout").warn { "Terminating #{command}" } if config.verbose
+        Log.for("stdout").warn { "Terminating #{command}" } if config.verbose?
 
         process.terminate
       end
 
       spawn(name: "output-monitor #{command}") do
         while line = output.gets
-          monitor_channel.send line if config.verbose
+          monitor_channel.send line if config.verbose?
           break if process.terminated?
         end
       end
