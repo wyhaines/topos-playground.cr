@@ -6,6 +6,9 @@ require "../env/*"
 class ToposPlayground::Command::Start < ToposPlayground::Command
   REDIS_CONTAINER_NAME = "redis-stack-server"
 
+  NODEJS_VERSION_REGEXP = /v([0-9]+\.[0-9]+\.[0-9]+)/m
+  MIN_VERSION_NODEJS = SemanticVersion.parse("16.0.0")
+
   DOCKER_VERSION_REGEXP = /Docker version ([0-9]+\.[0-9]+\.[0-9]+)/m
   MIN_VERSION_DOCKER    = SemanticVersion.parse("17.06.0")
 
@@ -34,7 +37,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   }
 
   def run
-    background_processes = [] of Tuple(Channel(Bool), Process)
+    background_processes = [] of Tuple(Channel(Bool), Channel(String), Process)
 
     Log.for("stdout").info { "Starting Topos-Playground...\n" }
 
@@ -46,15 +49,31 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     run_local_erc20_messaging_infra
     retrieve_and_write_contract_addresses_to_env
     background_processes << run_executor_service
-    run_dapp_frontend_service
+    background_processes << run_dapp_frontend_service
     completion_banner
     wait_for background_processes
   end
 
   def verify_dependency_installation
+    verify_nodejs_installation
     verify_docker_installation
     verify_docker_compose_installation
     verify_git_installation
+  end
+
+  def verify_nodejs_installation
+    status, stdout, stderr = run_process("node --version")
+    if status.success? && (match = stdout.to_s.match(NODEJS_VERSION_REGEXP))
+      if SemanticVersion.parse(match[1]) >= MIN_VERSION_NODEJS
+        Log.for("stdout").info { "✅ Node.js -- Version: #{match[1]}" }
+      else
+        Log.for("stdout").info { "❌ Node.js -- Version: #{match[1]}" }
+        Error.error { "Node.js #{match[1]} is not supported. Please upgrade Node.js to #{MIN_VERSION_NODEJS} or higher." }
+        exit 1
+      end
+    else
+      Log.for("stdout").info { "Failed to verify nodejs installation: #{stdout}#{stderr}" }
+    end
   end
 
   def verify_docker_installation
@@ -231,7 +250,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
       fh.puts "VITE_TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
       fh.puts "VITE_ERC20_MESSAGING_CONTRACT_ADDRESS=#{env_hash["ERC20_MESSAGING_CONTRACT_ADDRESS"]}"
     end
-    Log.for("stdout").info { "✅ Contract addresses successfully written to #{EnvRegistry["dappfrontend"].new.path}" }
+    Log.for("stdout").info { "✅ Contract addresses successfully written to #{sub_working_dir(EnvRegistry["dappfrontend"].new.path)}" }
 
     File.open(
       sub_working_dir(EnvRegistry["executorservice"].new.path),
@@ -239,7 +258,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
       fh.puts "SUBNET_REGISTRATOR_CONTRACT_ADDRESS=#{env_hash["SUBNET_REGISTRATOR_CONTRACT_ADDRESS"]}"
       fh.puts "TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
     end
-    Log.for("stdout").info { "✅ Contract addresses successfully written to #{EnvRegistry["executorservice"].new.path}" }
+    Log.for("stdout").info { "✅ Contract addresses successfully written to #{sub_working_dir(EnvRegistry["executorservice"].new.path)}" }
   end
 
   def parse_contract_addresses_to_hash(filename)
@@ -290,9 +309,11 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     Error.error { "Failed to install dependencies: #{ex.message}" }
   end
 
-  def start_executor_service(secrets_path, executor_service_path) : Tuple(Channel(Bool), Process)
-    kill_channel, process = run_process(
-      %(#{shell} -c "source #{secrets_path} && npm start"),
+  def start_executor_service(secrets_path, executor_service_path) : Tuple(Channel(Bool), Channel(String), Process)
+    npm = Process.find_executable("npm") || "npm"
+
+    kill_channel, monitor_channel, process = run_process(
+      %(#{shell} -c "source #{secrets_path} && #{npm} start"),
       chdir: executor_service_path,
       env: nil,
       background: true
@@ -300,7 +321,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
 
     Log.for("stdout").info { "✅ Executor Service is running" }
 
-    {kill_channel, process}
+    {kill_channel, monitor_channel, process}
   end
 
   def run_executor_service
@@ -314,7 +335,45 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     start_executor_service(secrets_path, executor_service_path)
   end
 
+  def build_dapp_frontend_service(secrets_path, dapp_frontend_service_path)
+    npm = Process.find_executable("npm") || "npm"
+
+    status, stdout, stderr = run_process(
+      %(#{shell} -c "source #{secrets_path} && #{npm} run frontend:build"),
+      chdir: dapp_frontend_service_path
+    )
+
+    if status.success?
+      Log.for("stdout").info { "✅ dApp Frontend is built" }
+    else
+      Error.error { "#{status.exit_reason}: Failed to build dApp Frontend: #{stderr}" }
+      exit status.exit_code
+    end
+  end
+
+  def start_dapp_frontend_service(secrets_path, dapp_frontend_service_path) : Tuple(Channel(Bool), Channel(String), Process)
+    npm = Process.find_executable("npm") || "npm"
+    kill_channel, monitor_channel, process = run_process(
+      %(#{shell} -c "source #{secrets_path} && #{npm} run backend:start"),
+      chdir: dapp_frontend_service_path,
+      background: true
+    )
+
+    Log.for("stdout").info { "✅ dApp Frontend is running" }
+
+    {kill_channel, monitor_channel, process}
+  end
+
   def run_dapp_frontend_service
+    Log.for("stdout").info { "" }
+    Log.for("stdout").info { "Running the dApp Frontend..." }
+
+    secrets_path = File.join(config.working_dir.to_s, ".env.secrets")
+    dapp_frontend_service_path = File.join(config.working_dir.to_s, "dapp-frontend-erc20-messaging")
+
+    do_npm_install(dapp_frontend_service_path)
+    build_dapp_frontend_service(secrets_path, dapp_frontend_service_path)
+    start_dapp_frontend_service(secrets_path, dapp_frontend_service_path)
   end
 
   def completion_banner
@@ -340,16 +399,25 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
 
     at_exit do
       background_processes.each do |background_process|
-        channel, process = background_process
+        kill_channel, monitor_channel, process = background_process
         process.terminate
-        channel.send(true)
+        kill_channel.send(true)
       end
     end
 
     background_processes.each do |background_process|
-      channel, process = background_process
+      spawn do
+        kill_channel, monitor_channel, process = background_process
+        while !monitor_channel.closed? && !process.terminated?
+          puts monitor_channel.receive
+        end
+      end
+    end
+
+    background_processes.each do |background_process|
+      kill_channel, monitor_channel, process = background_process
       process.wait
-      channel.send(true)
+      kill_channel.send(true)
     end
   end
 end

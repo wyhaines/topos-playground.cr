@@ -18,9 +18,14 @@ class ToposPlayground
   # @@tput : Tput::Namespace::Size? = nil
 
   property config : ToposPlayground::Config = ToposPlayground::Config.new
+  @@config : ToposPlayground::Config = ToposPlayground::Config.new
 
   alias Error = ErrorLog
 
+  def self.config
+    @@config
+  end
+  
   def self.terminal_width
     @@terminal_width > -1 ? @@terminal_width : (@@terminal_width = determine_terminal_width)
   end
