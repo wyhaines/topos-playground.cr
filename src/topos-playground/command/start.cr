@@ -7,7 +7,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   REDIS_CONTAINER_NAME = "redis-stack-server"
 
   NODEJS_VERSION_REGEXP = /v([0-9]+\.[0-9]+\.[0-9]+)/m
-  MIN_VERSION_NODEJS = SemanticVersion.parse("16.0.0")
+  MIN_VERSION_NODEJS    = SemanticVersion.parse("16.0.0")
 
   DOCKER_VERSION_REGEXP = /Docker version ([0-9]+\.[0-9]+\.[0-9]+)/m
   MIN_VERSION_DOCKER    = SemanticVersion.parse("17.06.0")
@@ -42,7 +42,11 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     Log.for("stdout").info { "Starting Topos-Playground...\n" }
 
     verify_dependency_installation
-    clone_git_repositories
+    if config.offline?
+      validate_git_cache
+    else
+      clone_git_repositories
+    end
     copy_git_repositories_from_cache
     copy_env_files
     run_redis
@@ -62,72 +66,79 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   end
 
   def verify_nodejs_installation
-    status, stdout, stderr = run_process("node --version")
-    if status.success? && (match = stdout.to_s.match(NODEJS_VERSION_REGEXP))
-      if SemanticVersion.parse(match[1]) >= MIN_VERSION_NODEJS
-        Log.for("stdout").info { "✅ Node.js -- Version: #{match[1]}" }
-      else
-        Log.for("stdout").info { "❌ Node.js -- Version: #{match[1]}" }
-        Error.error { "Node.js #{match[1]} is not supported. Please upgrade Node.js to #{MIN_VERSION_NODEJS} or higher." }
-        exit 1
-      end
-    else
-      Log.for("stdout").info { "Failed to verify nodejs installation: #{stdout}#{stderr}" }
-    end
+    version_check(
+      command: "node --version",
+      version: MIN_VERSION_NODEJS,
+      version_regexp: NODEJS_VERSION_REGEXP,
+      formal_label: "Node.js"
+    )
   end
 
   def verify_docker_installation
-    status, stdout, stderr = run_process("docker --version")
-    if status.success? && (match = stdout.to_s.match(DOCKER_VERSION_REGEXP))
-      if SemanticVersion.parse(match[1]) >= MIN_VERSION_DOCKER
-        Log.for("stdout").info { "✅ Docker -- Version: #{match[1]}" }
-      else
-        Log.for("stdout").info { "❌ Docker -- Version: #{match[1]}" }
-        Error.error { "Docker #{match[1]} is not supported. Please upgrade Docker to #{MIN_VERSION_DOCKER} or higher." }
-        exit 1
-      end
-    else
-      Log.for("stdout").info { "Failed to verify docker installation: #{stdout}#{stderr}" }
-    end
-  rescue ex
-    Error.error { "Failed to verify docker installation: #{ex.message}" }
-    exit 1
+    version_check(command: "docker --version",
+      version: MIN_VERSION_DOCKER,
+      version_regexp: DOCKER_VERSION_REGEXP,
+      formal_label: "Docker")
   end
 
   def verify_docker_compose_installation
-    status, stdout, stderr = run_process("docker compose version")
-    if status.success? && (match = stdout.to_s.match(DOCKER_COMPOSE_VERSION_REGEXP))
-      if SemanticVersion.parse(match[1]) >= MIN_VERSION_DOCKER_COMPOSE
-        Log.for("stdout").info { "✅ Docker Compose -- Version: #{match[1]}" }
-      else
-        Log.for("stdout").info { "❌ Docker Compose -- Version: #{match[1]}" }
-        Error.error { "Docker Compose #{match[1]} is not supported. Please upgrade Docker Compose to #{MIN_VERSION_DOCKER_COMPOSE} or higher." }
-        exit 1
-      end
-    else
-      Log.for("stdout").info { "Failed to verify docker-compose installation: #{stdout}#{stderr}" }
-    end
-  rescue ex
-    Error.error { "Failed to verify docker-compose installation: #{ex.message}" }
-    exit 1
+    version_check(
+      command: "docker compose version",
+      version: MIN_VERSION_DOCKER_COMPOSE,
+      version_regexp: DOCKER_COMPOSE_VERSION_REGEXP,
+      formal_label: "Docker Compose",
+      inline_label: "docker-compose"
+    )
   end
 
   def verify_git_installation
-    status, stdout, stderr = run_process("git version")
-    if status.success? && (match = stdout.to_s.match(GIT_VERSION_REGEXP))
-      if SemanticVersion.parse(match[1]) >= MIN_VERSION_GIT
-        Log.for("stdout").info { "✅ Git -- Version: #{match[1]}" }
+    version_check(
+      command: "git version",
+      version: MIN_VERSION_GIT,
+      version_regexp: GIT_VERSION_REGEXP,
+      formal_label: "Git"
+    )
+  end
+
+  def version_check(
+    command,
+    version,
+    version_regexp,
+    formal_label,
+    inline_label = nil
+  )
+    status, output = run_process(command)
+    if status.success? && (match = output.to_s.match(version_regexp))
+      if SemanticVersion.parse(match[1]) >= version
+        Log.for("stdout").info { "✅ #{formal_label} -- Version: #{match[1]}" }
       else
-        Log.for("stdout").info { "❌ Git -- Version: #{match[1]}" }
-        Error.error { "Git #{match[1]} is not supported. Please upgrade Git to #{MIN_VERSION_GIT} or higher." }
+        Log.for("stdout").info { "❌ #{formal_label} -- Version: #{match[1]}" }
+        Error.error { "#{formal_label} #{match[1]} is not supported. Please upgrade #{formal_label} to #{version} or higher." }
         exit 1
       end
     else
-      Log.for("stdout").info { "Failed to verify git installation: #{stdout}#{stderr}" }
+      Log.for("stdout").info { "Failed to verify #{inline_label || formal_label} installation: #{output}" }
+      exit 1
     end
   rescue ex
-    Error.error { "Failed to verify git installation: #{ex.message}" }
+    Error.error { "Failed to verify #{inline_label || formal_label} installation: #{ex.message}" }
     exit 1
+  end
+
+  def validate_git_cache
+    Log.for("stdout").info { "" }
+    Log.for("stdout").info { "Validating git cache for offline use..." }
+    GIT_REPOS.each do |repo|
+      repo_path = File.join(config.cache_dir.to_s, repo[:repo])
+
+      if Dir.exists?(repo_path)
+        Log.for("stdout").info { "✅ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} is cached" }
+      else
+        Log.for("stdout").info { "❌ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} not found in cache" }
+        Error.error { "Git cache is not valid. Please run the start command with an internet connection to download the git repositories." }
+        exit 1
+      end
+    end
   end
 
   def clone_git_repositories
@@ -141,7 +152,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
         update_repository(repo_path)
       else
         Log.for("stdout").info { "Cloning #{repo[:org]}/#{repo[:repo]}..." }
-        status, stdout, stderr = run_process("git clone --depth 1 #{repo[:branch] ? "--branch #{repo[:branch]}" : ""} https://github.com/#{repo[:org]}/#{repo[:repo]}.git #{repo_path}")
+        status, output = run_process("git clone --depth 1 #{repo[:branch] ? "--branch #{repo[:branch]}" : ""} https://github.com/#{repo[:org]}/#{repo[:repo]}.git #{repo_path}")
         if status.success?
           Log.for("stdout").info { "✅ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} successfully cloned" }
           Fiber.yield
@@ -156,14 +167,14 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   end
 
   def update_repository(repo_path)
-    status, stdout, stderr = run_process(
+    status, output = run_process(
       "git pull",
       repo_path)
 
     if status.success?
       Log.for("stdout").info { "✅ Respository is up-to-date" }
     else
-      Log.for("stdout").info { "❌ Repository update failed: #{stdout}\n#{stderr}" }
+      Log.for("stdout").info { "❌ Repository update failed: #{output}" }
     end
   rescue ex
     Error.error { "Repository update failed: #{ex.message}" }
@@ -218,7 +229,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Running the ERC20 messaging infrastructures..." }
 
-    status, stdout, stderr = run_process(
+    status, output = run_process(
       %(#{shell} -c "source #{config.working_dir}/.env.secrets && docker compose up -d"),
       chdir: config.execution_path.to_s,
       env: EnvRegistry["secrets"].new.env)
@@ -226,7 +237,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     if status.success?
       Log.for("stdout").info { "✅ Subnets & TCE are running" }
     else
-      Error.error { "#{status.exit_reason}: Failure while starting the subnets & TCE: #{stderr}" }
+      Error.error { "#{status.exit_reason}: Failure while starting the subnets & TCE: #{output}" }
       exit status.exit_code
     end
   rescue ex
@@ -236,7 +247,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   def retrieve_and_write_contract_addresses_to_env
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Retrieving contract addresses..." }
-    status, stdout, stderr = run_process(
+    status, output = run_process(
       "docker cp contracts-topos:/contracts/.env #{config.working_dir}/.env.addresses",
       env: EnvRegistry["secrets"].new.env
     )
@@ -280,11 +291,11 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     command =
       "docker start #{REDIS_CONTAINER_NAME} || " +
         "docker run -d --name #{REDIS_CONTAINER_NAME} -p 6379:6379 redis/#{REDIS_CONTAINER_NAME}:latest"
-    status, stdout, stderr = run_process(command)
+    status, output = run_process(command)
     if status.success?
       Log.for("stdout").info { "✅ Redis server is running" }
     else
-      Error.error { "#{status.exit_reason}: Failure while starting the redis server: #{[stdout, stderr].join("\n")}" }
+      Error.error { "#{status.exit_reason}: Failure while starting the redis server: #{output}" }
       exit status.exit_code
     end
   rescue ex
@@ -294,7 +305,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   def do_npm_install(path)
     npm = Process.find_executable("npm") || "npm"
 
-    status, stdout, stderr = run_process(
+    status, output = run_process(
       "#{npm} install",
       chdir: path
     )
@@ -302,7 +313,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     if status.success?
       Log.for("stdout").info { "✅ Dependencies are installed" }
     else
-      Error.error { "#{status.exit_reason}: Failed to install dependencies: #{stderr}" }
+      Error.error { "#{status.exit_reason}: Failed to install dependencies: #{output}" }
       exit status.exit_code
     end
   rescue ex
@@ -338,7 +349,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   def build_dapp_frontend_service(secrets_path, dapp_frontend_service_path)
     npm = Process.find_executable("npm") || "npm"
 
-    status, stdout, stderr = run_process(
+    status, output = run_process(
       %(#{shell} -c "source #{secrets_path} && #{npm} run frontend:build"),
       chdir: dapp_frontend_service_path
     )
@@ -346,7 +357,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     if status.success?
       Log.for("stdout").info { "✅ dApp Frontend is built" }
     else
-      Error.error { "#{status.exit_reason}: Failed to build dApp Frontend: #{stderr}" }
+      Error.error { "#{status.exit_reason}: Failed to build dApp Frontend: #{output}" }
       exit status.exit_code
     end
   end

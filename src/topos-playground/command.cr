@@ -52,17 +52,16 @@ class ToposPlayground
     end
 
     def self.run_process(command, chdir = ".", env : Process::Env = nil, shell : Bool = true)
-      stdout = IO::Memory.new
-      stderr = IO::Memory.new
+      output = IO::Memory.new
       status = Process.run(
         command,
         shell: shell,
-        output: stdout,
-        error: stderr,
+        output: output,
+        error: output,
         env: env,
         chdir: chdir.to_s)
 
-      {status, stdout, stderr}
+      {status, output}
     end
 
     def run_process(command, chdir = ".", env : Process::Env = nil, shell : Bool = true)

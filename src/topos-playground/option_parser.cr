@@ -38,11 +38,12 @@ class ToposPlayground
       exit
     end
 
-    parser.on("-v",  "--verbose", "Show more information about the execution of a command") { config.verbose = true }
-    parser.on("-q",  "--quiet", "Show minimal onscreen information about the execution of a command") { config.quiet = true }
+    parser.on("-v", "--verbose", "Show more information about the execution of a command") { config.verbose = true }
+    parser.on("-q", "--quiet", "Show minimal onscreen information about the execution of a command") { config.quiet = true }
     parser.on("-nc", "--no-cache", "Don't use ") { config.no_cache = true }
-    parser.on("-n",  "--no-log", "Do not write a log file") { config.no_log = true }
-    parser.on("-h",  "--help", "Display this help") do
+    parser.on("-n", "--no-log", "Do not write a log file") { config.no_log = true }
+    parser.on("-o", "--offline", "Depend on local git repository cache; don't perform any updates that require internet access") { config.offline = true }
+    parser.on("-h", "--help", "Display this help") do
       puts parser
       exit
     end

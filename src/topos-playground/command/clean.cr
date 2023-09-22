@@ -66,13 +66,13 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
 
   private def shutdown_docker_compose
     command = "docker compose down -v"
-    status, stdout, stderr = run_process(
+    status, output = run_process(
       command,
       config.execution_path.to_s)
     if status.success?
       Log.for("stdout").info { "✅ subnets & TCE are down" }
     else
-      Error.error { "Failed to shut down ERC20 messaging protocol infrastructure: #{stderr}" }
+      Error.error { "Failed to shut down ERC20 messaging protocol infrastructure: #{output}" }
       exit 1
     end
   rescue ex
@@ -82,23 +82,23 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
 
   def shutdown_redis
     redis_container_name = "redis-stack-server"
-    status, stdout, stderr = run_process("docker ps --format '{{.Names}}'")
+    status, output = run_process("docker ps --format '{{.Names}}'")
     if status.success?
-      if stdout.to_s.includes?(redis_container_name)
+      if output.to_s.includes?(redis_container_name)
         Log.for("stdout").info { "Shutting down the redis container..." }
         command = "docker rm -f #{redis_container_name}"
-        status, _, stderr = run_process(command)
+        status, output = run_process(command)
 
         if status.success?
           Log.for("stdout").info { "✅ redis is down\n" }
         else
-          Error.error { "Failed to shut down redis: #{stderr}\n" }
+          Error.error { "Failed to shut down redis: #{output}\n" }
         end
       else
         Log.for("stdout").info { "✅ redis is not running\n" }
       end
     else
-      Error.error { "Failed to identify the redis container: #{stderr}" }
+      Error.error { "Failed to identify the redis container: #{output}" }
     end
   rescue ex
     puts ex
@@ -109,17 +109,17 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
   def remove_working_directory
     if config.working_dir_exists?
       Log.for("stdout").info { "Cleaning up the working directory (#{config.working_dir})..." }
-      status, stdout, stderr = run_process("rm -rf #{config.working_dir}")
+      status, output = run_process("rm -rf #{config.working_dir}")
       if status.success?
         Log.for("stdout").info { "✅ Working directory has been removed" }
       else
-        Error.error { "Failed to clean up the working directory (#{config.working_dir}): #{stderr}\n#{caller.join("\n")}" }
+        Error.error { "Failed to clean up the working directory (#{config.working_dir}): #{output}" }
       end
     else
       Log.for("stdout").info { "✅ Working directory (#{config.working_dir}) does not exist" }
     end
   rescue ex
-    Error.error { "XFailed to clean up the working directory (#{config.working_dir}): #{ex}\n#{caller.join("\n")}" }
+    Error.error { "XFailed to clean up the working directory (#{config.working_dir}): #{ex}" }
     exit 1
   end
 end

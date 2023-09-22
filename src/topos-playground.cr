@@ -25,7 +25,7 @@ class ToposPlayground
   def self.config
     @@config
   end
-  
+
   def self.terminal_width
     @@terminal_width > -1 ? @@terminal_width : (@@terminal_width = determine_terminal_width)
   end
