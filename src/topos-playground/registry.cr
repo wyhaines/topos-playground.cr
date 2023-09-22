@@ -34,7 +34,7 @@ class ToposPlayground
       @@name_to_class_map.keys
     end
 
-    def self.values
+    def self.classes
       @@name_to_class_map.values
     end
   end

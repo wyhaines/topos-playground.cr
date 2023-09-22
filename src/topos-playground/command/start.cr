@@ -206,7 +206,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Copying env files..." }
     Fiber.yield
-    EnvRegistry.values.each do |env_class|
+    EnvRegistry.classes.each do |env_class|
       env_file = env_class.new
       if content = env_file.content
         filename = sub_working_dir(env_file.path.to_s)
