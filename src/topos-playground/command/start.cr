@@ -52,8 +52,17 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     run_redis
     run_local_erc20_messaging_infra
     retrieve_and_write_contract_addresses_to_env
-    background_processes << run_executor_service
-    background_processes << run_dapp_frontend_service
+
+    run_executor_service.tap do |background_process|
+      setup_io_handlers_for_background_process(background_process)
+      background_processes << background_process
+    end
+
+    run_dapp_frontend_service.tap do |background_process|
+      setup_io_handlers_for_background_process(background_process)
+      background_processes << background_process
+    end
+
     completion_banner
     wait_for background_processes
   end
@@ -403,27 +412,25 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     Log.for("stdout").info { banner }
   end
 
+  def setup_io_handlers_for_background_process(background_process)
+    at_exit do
+      kill_channel, monitor_channel, process = background_process
+      process.terminate
+      kill_channel.send(true)
+    end
+
+    spawn do
+      kill_channel, monitor_channel, process = background_process
+      while !monitor_channel.closed? && !process.terminated?
+        puts monitor_channel.receive
+      end
+    end
+  end
+
   def wait_for(background_processes)
     # TODO: Have a command line flag so that the CLI _does not_ block on the
     # execution of the executor or the dapp frontend. Also add a cleanup
     # phase to reap any executor or dapp frontend that may be running
-
-    at_exit do
-      background_processes.each do |background_process|
-        kill_channel, monitor_channel, process = background_process
-        process.terminate
-        kill_channel.send(true)
-      end
-    end
-
-    background_processes.each do |background_process|
-      spawn do
-        kill_channel, monitor_channel, process = background_process
-        while !monitor_channel.closed? && !process.terminated?
-          puts monitor_channel.receive
-        end
-      end
-    end
 
     background_processes.each do |background_process|
       kill_channel, monitor_channel, process = background_process
