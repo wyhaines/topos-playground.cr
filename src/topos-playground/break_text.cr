@@ -4,7 +4,7 @@ class ToposPlayground
 
     # Split the string into words to calculate word length statistics
     words = str.split(' ')
-    word_lengths = words.map { |word| word.size }
+    word_lengths = words.map(&.size)
 
     # Calculate average word length
     average = word_lengths.sum.to_f / word_lengths.size

@@ -17,8 +17,8 @@ dependencies:
     github: crystal-term/screen
   csuuid:
     github: wyhaines/csuuid.cr
-  nbchannel:
-    github: wyhaines/nbchannel.cr
+  defined:
+    github: wyhaines/defined.cr
 
 
 development_dependencies:

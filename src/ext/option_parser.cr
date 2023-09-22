@@ -1,3 +1,6 @@
+# These modifications to OptionParser apply text wrapping so that the command-line help is
+# nicely formatted regardless of terminal width, and so that the formatting is visually
+# similar to the Javascript version.
 class OptionParser
   def to_s(io : IO) : Nil
     # Get the width of the screen so that text can be intelligently wrapped.

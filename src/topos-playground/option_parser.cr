@@ -1,4 +1,5 @@
 require "option_parser"
+require "defined"
 require "../ext/option_parser"
 require "./helptext"
 require "./break_text"
@@ -8,9 +9,15 @@ class ToposPlayground
     parser = setup_options_parser
 
     parser.parse
-    unless config.command?
-      puts parser
-      exit
+
+    # When ran without arguments, it will print help, UNLESS it is being ran
+    # when the `Spec` module is defined. This prevents the help from appearing
+    # during spec runs.
+    unless_defined?(Spec) do
+      unless config.command?
+        puts parser
+        exit
+      end
     end
 
     @@config = @config

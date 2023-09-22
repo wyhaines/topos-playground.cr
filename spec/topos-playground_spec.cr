@@ -1,9 +1,4 @@
 require "./spec_helper"
 
-describe Topos::Playground do
-  # TODO: Write tests
-
-  it "works" do
-    false.should eq(true)
-  end
+describe ToposPlayground do
 end
