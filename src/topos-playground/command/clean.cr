@@ -6,7 +6,7 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
 
     verify_working_directory
     verify_execution_path
-    shutdown_ERC20_messagine_protocol_infra
+    shutdown_erc20_messagine_protocol_infra
     shutdown_redis
     remove_working_directory
   end
@@ -55,7 +55,7 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
     end
   end
 
-  def shutdown_ERC20_messagine_protocol_infra
+  def shutdown_erc20_messagine_protocol_infra
     if config.execution_path_exists
       Log.for("stdout").info { "Shutting down ERC20 messaging protocol infrastructure..." }
       shutdown_docker_compose
