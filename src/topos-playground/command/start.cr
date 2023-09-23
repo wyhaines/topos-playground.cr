@@ -161,7 +161,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
         update_repository(repo_path)
       else
         Log.for("stdout").info { "Cloning #{repo[:org]}/#{repo[:repo]}..." }
-        status, output = run_process("git clone --depth 1 #{repo[:branch] ? "--branch #{repo[:branch]}" : ""} https://github.com/#{repo[:org]}/#{repo[:repo]}.git #{repo_path}")
+        status, _ = run_process("git clone --depth 1 #{repo[:branch] ? "--branch #{repo[:branch]}" : ""} https://github.com/#{repo[:org]}/#{repo[:repo]}.git #{repo_path}")
         if status.success?
           Log.for("stdout").info { "✅ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} successfully cloned" }
           Fiber.yield
@@ -231,7 +231,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   end
 
   def shell
-    ["bash", "zsh"].map { |exe| Process.find_executable(exe) }.compact[0]? || "/bin/bash"
+    ["bash", "zsh"].compact_map { |exe| Process.find_executable(exe) }[0]? || "/bin/bash"
   end
 
   def run_local_erc20_messaging_infra
@@ -256,7 +256,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   def retrieve_and_write_contract_addresses_to_env
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Retrieving contract addresses..." }
-    status, output = run_process(
+    run_process(
       "docker cp contracts-topos:/contracts/.env #{config.working_dir}/.env.addresses",
       env: EnvRegistry["secrets"].new.env
     )
@@ -414,13 +414,13 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
 
   def setup_io_handlers_for_background_process(background_process)
     at_exit do
-      kill_channel, monitor_channel, process = background_process
+      kill_channel, _, process = background_process
       process.terminate
       kill_channel.send(true)
     end
 
     spawn do
-      kill_channel, monitor_channel, process = background_process
+      _, monitor_channel, process = background_process
       while !monitor_channel.closed? && !process.terminated?
         puts monitor_channel.receive
       end
@@ -433,7 +433,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     # phase to reap any executor or dapp frontend that may be running
 
     background_processes.each do |background_process|
-      kill_channel, monitor_channel, process = background_process
+      kill_channel, _, process = background_process
       process.wait
       kill_channel.send(true)
     end

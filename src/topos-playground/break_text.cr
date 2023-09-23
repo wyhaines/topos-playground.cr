@@ -1,21 +1,9 @@
 class ToposPlayground
+  # ameba:disable Metrics/CyclomaticComplexity
   def self.break_text(str : String, max_line_length : Int32 = 80) : String
     return str if max_line_length <= 0
 
-    # Split the string into words to calculate word length statistics
-    words = str.split(' ')
-    word_lengths = words.map(&.size)
-
-    # Calculate average word length
-    average = word_lengths.sum.to_f / word_lengths.size
-
-    # Calculate standard deviation of word length
-    sum_of_squared_differences = word_lengths.reduce(0.0) { |sum, length| sum + (length - average)**2 }
-    standard_deviation = Math.sqrt(sum_of_squared_differences / word_lengths.size)
-
-    # Determine the maximum word length to allow before breaking
-    max_word_length = [max_line_length, average + standard_deviation].min
-
+    max_word_length = calculate_max_word_length(str, max_line_length)
     lines = [] of String
     line = ""
     word = ""
@@ -58,6 +46,22 @@ class ToposPlayground
     end
     lines << line unless line.empty?
     lines.join
+  end
+
+  def self.calculate_max_word_length(str, max_line_length)
+    # Split the string into words to calculate word length statistics
+    words = str.split(' ')
+    word_lengths = words.map(&.size)
+
+    # Calculate average word length
+    average = word_lengths.sum.to_f / word_lengths.size
+
+    # Calculate standard deviation of word length
+    sum_of_squared_differences = word_lengths.reduce(0.0) { |sum, length| sum + (length - average)**2 }
+    standard_deviation = Math.sqrt(sum_of_squared_differences / word_lengths.size)
+
+    # Determine the maximum word length to allow before breaking
+    [max_line_length, average + standard_deviation].min
   end
 
   def self.break_line(lines, line, word, max_line_length, max_word_length, indentation)
