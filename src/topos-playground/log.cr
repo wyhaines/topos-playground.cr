@@ -16,7 +16,6 @@ class ToposPlayground
         STDOUT,
         formatter: StdoutConsoleFormat,
         dispatcher: Log::DirectDispatcher))
-    #        dispatcher: Log::AsyncDispatcher.new(2048)))
     log_config.bind(
       "error",
       :debug,
@@ -24,7 +23,6 @@ class ToposPlayground
         STDOUT,
         formatter: StderrConsoleFormat,
         dispatcher: Log::DirectDispatcher))
-    #        dispatcher: Log::AsyncDispatcher.new(2048)))
   end
 
   def setup_console_logging
@@ -32,7 +30,16 @@ class ToposPlayground
   end
 
   def setup_all_logging
-    # Log.builder.bind "stdout", :debug, Log::IOBackend.new(get_log_file, dispatcher: Log::AsyncDispatcher.new(2048))
-    # Log.builder.bind "error", :debug, Log::IOBackend.new(get_log_file, dispatcher: Log::AsyncDispatcher.new(2048))
+    Log.builder.bind(
+      "stdout", :trace,
+      Log::IOBackend.new(
+        get_log_file,
+        dispatcher: Log::DirectDispatcher))
+    Log.builder.bind(
+      "error",
+      :debug,
+      Log::IOBackend.new(
+        get_log_file,
+        dispatcher: Log::DirectDispatcher))
   end
 end
