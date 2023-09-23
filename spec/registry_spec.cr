@@ -1,5 +1,6 @@
 require "./spec_helper"
-require "../src/topos-playground/registry"
+
+# require "../src/topos-playground/registry"
 
 abstract class TestRegistee
   macro inherited

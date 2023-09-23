@@ -1,4 +1,27 @@
 class ToposPlayground
+  # An instance of `Config` provides a `Hash(String, String | Int | Bool)` that is accessed
+  # via method calls. The method names are the keys of the hash.
+  #
+  # For example:
+  #
+  # ```
+  # config = Config.new
+  #
+  # config.verbose = true
+  # pp config.verbose # => true
+  # if config.quiet? # => false
+  #   puts "be quiet"
+  # else
+  #   puts "don't be quiet" # => "don't be quiet"
+  # end
+  # ```
+  #
+  # The `#data` method will return the raw data hash.
+  #
+  # ```
+  # pp config.data # => {"verbose" => true}
+  # ```
+  #
   class Config
     alias ConfigTypes = String | Int32 | Bool
     DATA = Hash(String, ConfigTypes).new
