@@ -28,7 +28,7 @@ describe "ToposPlayground Log Setup" do
     if will_colorize
       log.should eq "❗\e[32m ERROR: Log 1 to error\e[0m\n"
     else
-      log.should eq "ERROR: Log 1 to error\n"
+      log.should eq "❗ ERROR: Log 1 to error\n"
     end
   end
 
