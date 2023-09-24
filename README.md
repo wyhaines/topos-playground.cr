@@ -1,7 +1,6 @@
 <div id="top" />
 <br />
 <div align="center">
-  <img src="https://raw.githubusercontent.com/topos-protocol/topos-playground/main/.github/assets/topos_logo.png#gh-light-mode-only" alt="Logo" width="200">
   <img src="https://raw.githubusercontent.com/topos-protocol/topos-playground/main/.github/assets/topos_logo_dark.png#gh-dark-mode-only" alt="Logo" width="200">
   <br />
   <p align="center">
