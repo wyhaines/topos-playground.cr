@@ -396,6 +396,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     start_dapp_frontend_service(secrets_path, dapp_frontend_service_path)
   end
 
+  # Everything is done; display some final information to the user.
   def completion_banner
     Fiber.yield
     banner = <<-EBANNER
@@ -412,6 +413,9 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     Log.for("stdout").info { banner }
   end
 
+  # Setup an `at_exit` handler to ensure that the started processes are cleaned up upon
+  # `topos-playground` exiting. Also spawn a fiber to monitor the processes and print
+  # any IO sent to the monitor channel.
   def setup_io_handlers_for_background_process(background_process)
     at_exit do
       kill_channel, _, process = background_process
@@ -427,6 +431,10 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     end
   end
 
+  # Block, waiting for the watched processes to die. They may be killed manually,
+  # or via the `at_exit` handler that was created when they were started, and which
+  # is triggered by the `topos-playground` process exiting, such as when `ctrl-c` is
+  # pressed.
   def wait_for(background_processes)
     # TODO: Have a command line flag so that the CLI _does not_ block on the
     # execution of the executor or the dapp frontend. Also add a cleanup
@@ -435,7 +443,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     background_processes.each do |background_process|
       kill_channel, _, process = background_process
       process.wait
-      kill_channel.send(true)
+      kill_channel.send(true) unless kill_channel.closed?
     end
   end
 end

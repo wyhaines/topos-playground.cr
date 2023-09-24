@@ -4,10 +4,17 @@ require "./command_registry"
 require "./error_log"
 
 class ToposPlayground
+  # All commands inherit from this class. It provides the expected logging constant
+  # interfaces, handles registration with the command registry, and access to the
+  # topos-playground configuration. It also provides a couple convenience `#run_process`
+  # methods for running processes and capturing their output either synchronously or
+  # asynchronously.
   abstract class Command
     alias Log = ::Log
     alias Error = ErrorLog
 
+    # Register the command with the command registry. Any class that inherits from
+    # this class will be automatically registered.
     macro inherited
       CommandRegistry.register self
     end
@@ -20,6 +27,20 @@ class ToposPlayground
       @@config = config
     end
 
+    # All subclasses must implement `#run`, which is responsible for carrying out the
+    # logic of the command.
+    abstract def run
+
+    # Convenience method for running a process and capturing its output. This method
+    # runs the process asynchronously, spawning two threads. One monitors an instance of
+    # `Channel(Bool)` and kills the process when it receives a message. This allows the
+    # process to be gracefully terminated when the user presses `Ctrl-C`.
+    #
+    # The other thread monitors the output of the process, and passes it through the
+    # `monitor_channel` if verbose logging has been requested via the command line flags.
+    #
+    # The method returns a tuple containing the `kill_channel`, `monitor_channel`, and
+    # `process` objects.
     def self.run_process(command, chdir = ".", background : Bool = false, env : Process::Env = nil)
       kill_channel = Channel(Bool).new
       monitor_channel = Channel(String).new(100)
