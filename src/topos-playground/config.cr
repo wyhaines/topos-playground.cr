@@ -9,7 +9,7 @@ class ToposPlayground
   #
   # config.verbose = true
   # pp config.verbose # => true
-  # if config.quiet? # => false
+  # if config.quiet?  # => false
   #   puts "be quiet"
   # else
   #   puts "don't be quiet" # => "don't be quiet"
@@ -23,13 +23,24 @@ class ToposPlayground
   # ```
   #
   class Config
+    # The Config hash will accept values of String, Int32, or Bool.
     alias ConfigTypes = String | Int32 | Bool
+
+    # The configuration is stored within a constant.
     DATA = Hash(String, ConfigTypes).new
 
+    # Return the raw config data hash.
+    #
+    # ```
+    # config.data            # => {"verbose" => true}
+    # pp tyoeof(config.data) # => Hash(String, Bool | Int32 | String)
+    # ```
+    #
     def data
       DATA
     end
 
+    # This macro writes the code to write to or access the configuration hash.
     macro method_missing(call)
       {% if call.name == "[]" %}
         DATA[{{ call.args[0].id }}]
