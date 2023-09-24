@@ -22,7 +22,11 @@ describe ToposPlayground::StderrConsoleFormat do
     formatter = ToposPlayground::StderrConsoleFormat.new(entry, io)
     formatter.run
 
-    io.rewind.gets_to_end.should eq "❗\e[32m ERROR: This is a test message\e[0m"
+    if will_colorize
+      io.rewind.gets_to_end.should eq "❗\e[32m ERROR: This is a test message\e[0m"
+    else
+      io.rewind.gets_to_end.should eq "❗ ERROR: This is a test message"
+    end
   end
 end
 
@@ -48,7 +52,11 @@ describe ToposPlayground::StdoutConsoleFormat do
     formatter = ToposPlayground::StdoutConsoleFormat.new(entry, io)
     formatter.run
 
-    io.rewind.gets_to_end.should eq "\e[32mThis is a test message\e[0m"
+    if will_colorize
+      io.rewind.gets_to_end.should eq "\e[32mThis is a test message\e[0m"
+    else
+      io.rewind.gets_to_end.should eq "This is a test message"
+    end
   end
 
   it "formats a long message as expected" do
@@ -64,8 +72,14 @@ describe ToposPlayground::StdoutConsoleFormat do
     formatter = ToposPlayground::StdoutConsoleFormat.new(entry, io)
     formatter.run
 
-    io.rewind.gets_to_end.should eq(
-      "\e[32mabcde fghijklmnop q rstu vwxyz. abc defghij klmnopq rstuvwxyz. abcdef ghi \n" +
-      "jklmnop qrst uvw xyz.\e[0m")
+    if will_colorize
+      io.rewind.gets_to_end.should eq(
+        "\e[32mabcde fghijklmnop q rstu vwxyz. abc defghij klmnopq rstuvwxyz. abcdef ghi \n" +
+        "jklmnop qrst uvw xyz.\e[0m")
+    else
+      io.rewind.gets_to_end.should eq(
+        "abcde fghijklmnop q rstu vwxyz. abc defghij klmnopq rstuvwxyz. abcdef ghi \n" +
+        "jklmnop qrst uvw xyz.")
+    end
   end
 end

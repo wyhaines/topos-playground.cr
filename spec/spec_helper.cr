@@ -24,4 +24,8 @@ def setup_memory_logging
   end
 end
 
+def will_colorize
+  "".colorize(:green).to_s == "\e[32m\e[0m" ? true : false
+end
+
 setup_memory_logging
