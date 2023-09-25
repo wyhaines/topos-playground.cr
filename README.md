@@ -25,7 +25,13 @@ The Topos Playground is a CLI that allows you to easily run and manage a local T
 
 ### Install / Run topos-playground
 
-Precompiled, statically linked binaries are available for Linux and for MacOS from the Releases tab in this github repository. [Add Details]
+Precompiled, statically linked binaries are available for Linux and for MacOS from the [Releases](https://github.com/wyhaines/topos-playground.cr/releases) tab in this github repository. Download the appropriate binary for your platform, and uncompress it. You may want to rename it to just `topos-playground`, as all precompiled binaries reflect the architecture and platform that they were compiled for in their names, and you may want to move it into your $PATH:
+
+```
+gzip -d topos-playground-linux-x86_64.gz # or `unzip topos-playground-darwin.zip`
+mv topos-playground-linux-x86_64 topos-playground`
+
+```
 
 #### Install via Git
 
