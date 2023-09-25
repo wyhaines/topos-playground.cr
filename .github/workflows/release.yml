@@ -1,6 +1,7 @@
 name: Topos-Playground Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "*.*.*"
