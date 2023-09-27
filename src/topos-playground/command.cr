@@ -22,6 +22,9 @@ class ToposPlayground
     property config : Config
     class_property config : Config = ToposPlayground::Config.new
 
+    def self.options(parser, config)
+    end
+
     def initialize(config)
       @config = config
       @@config = config

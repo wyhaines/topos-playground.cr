@@ -41,8 +41,9 @@ class ToposPlayground
   private def setup_options_general(parser)
     parser.separator "Options:"
     parser.on("--version", "Show topos-playground version (v#{ToposPlayground::VERSION})") do
-      do_version
-      exit
+      # do_version
+      # exit
+      Command::Version.new(config).run
     end
 
     parser.on("-v", "--verbose", "Show more information about the execution of a command") { config.verbose = true }
@@ -58,27 +59,8 @@ class ToposPlayground
 
   private def setup_options_commands(parser)
     parser.separator "\nCommands:"
-    setup_options_command_clean(parser)
-    setup_options_command_start(parser)
-    setup_options_command_version(parser)
-  end
-
-  private def setup_options_command_clean(parser)
-    parser.on("clean", "Shut down Playground docker containers, and clean up the working directory") do
-      config.command = "clean"
-    end
-  end
-
-  private def setup_options_command_start(parser)
-    parser.on("start", "Verify that all dependencies are installed, clone any needed repositories, setup the environment, and start all of the docker containers for the Playground") do
-      config.command = "start"
-    end
-  end
-
-  private def setup_options_command_version(parser)
-    parser.on("version", "Show topos-playground version (v#{ToposPlayground::VERSION})") do
-      do_version
-      exit
+    CommandRegistry.names.sort.each do |command|
+      CommandRegistry[command].options(parser, config)
     end
   end
 
@@ -99,7 +81,7 @@ class ToposPlayground
     end
   end
 
-  def do_version
-    puts "topos-playground version #{ToposPlayground::VERSION}"
-  end
+  # def do_version
+  #   puts "topos-playground version #{ToposPlayground::VERSION}"
+  # end
 end

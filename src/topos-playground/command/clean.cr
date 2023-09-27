@@ -1,6 +1,12 @@
 require "../command"
 
 class ToposPlayground::Command::Clean < ToposPlayground::Command
+  def self.options(parser, config)
+    parser.on("clean", "Shut down Playground docker containers, and clean up the working directory") do
+      config.command = "clean"
+    end
+  end
+
   def run
     Log.for("stdout").info { "Cleaning up Topos-Playground...\n" }
 

@@ -36,6 +36,12 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     },
   }
 
+  def self.options(parser, config)
+    parser.on("start", "Verify that all dependencies are installed, clone any needed repositories, setup the environment, and start all of the docker containers for the Playground") do
+      config.command = "start"
+    end
+  end
+
   def run
     background_processes = [] of Tuple(Channel(Bool), Channel(String), Process)
 
