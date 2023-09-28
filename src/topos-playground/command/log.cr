@@ -43,9 +43,46 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     parser.on("prune", "Prune log files from the log directory") do
       config.subcommand = "prune"
       parser.separator("\nLog Prune options:")
+      parser.on("-n", "--dry-run", "Do not actually delete any files. Just show what would be deleted.") do
+        config.dry_run = true
+      end
       parser.on("-d [DAYS]", "--days [DAYS]", "Prune log files older than DAYS days. Defaults to 7 days.") do |days|
         days = 7 if days.empty?
         config.parameter = "days:#{days}"
+      end
+      parser.on("-s [SIZE]", "--size [SIZE]", <<-EDESC) do |size|
+        Prune log files smaller than SIZE bytes. Defaults to 1024 bytes.
+        Numbers can be suffixed to indicate units.
+            2048
+            2048b   2048 bytes
+            10k
+            10kb    10 kilobytes
+            1m
+            1mb     1 megabyte
+            4g
+            4gb     4 gigabytes
+        EDESC
+        size = 1024 if size.empty?
+        config.parameter = "size:#{size}"
+      end
+      parser.on("-r [RANGE]", "--range [RANGE]", <<-EDESC) do |range|
+        Prune log files within a given range. Files are numbered in the same manner as with the `list` command or the `view --index` command, with the most recent log file being at position 1.
+        Range syntax is as follows:
+            10..15  files 10 through 15
+            ..5     the 5 most recent files; i.e. files 1 to 5
+            6..     all files, starting with the 6th most recent file
+            ..      this would be the same as the `--all` flag
+
+        Specific files can also be specified by number, either alone, or in a comma separated list.
+            39      the 39th most recent file
+            3,5,7   the 3rd, 5th, and 7th most recent files
+        EDESC
+        unless range.empty?
+          config.parameter = "range:#{range}"
+        end
+      end
+      parser.on("-a", "--all", "Prune all log files.") do
+        config.parameter = "all"
       end
     end
   end
@@ -91,7 +128,7 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
   end
 
   def do_view_index(sorted_logs, selector)
-    selector = selector.to_s.to_i < 1 ? 1 : selector.to_s.to_i
+    selector = selector.to_s.to_i { 0 } < 1 ? 1 : selector.to_s.to_i
     selector = sorted_logs.size if selector > sorted_logs.size
 
     show_log_file(sorted_logs[-selector])
@@ -118,6 +155,107 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
   end
 
   def do_prune
+    config.parameter = "index:1" unless config.parameter?
+    operation, selector = config.parameter?.to_s.split(":", 2)
+
+    log_sort(handle_erroneously_old_logs(generate_base_list)).tap do |logs|
+      sorted_logs = handle_erroneously_young_logs(
+        logs,
+        *calculate_gaps_and_standard_deviation(logs))
+
+      case operation
+      when "days"
+        do_prune_days(sorted_logs, selector)
+      when "size"
+        do_prune_size(sorted_logs, selector)
+      when "range"
+        do_prune_range(sorted_logs, selector)
+      end
+    end
+  end
+
+  def do_prune_days(sorted_logs, selector)
+    selector = selector.to_s.to_i { 0 } <= 0 ? 0 : selector.to_s.to_i
+    beginning_of_day = Time.local.at_beginning_of_day
+    threshold = beginning_of_day - Time::Span.new(seconds: selector * 24 * 60 * 60)
+    sorted_logs.each do |log|
+      if log[2] < threshold
+        if config.dry_run?
+          puts "Would delete #{log[1]}"
+        else
+          File.delete(log[1])
+        end
+      end
+    end
+  end
+
+  def do_prune_size(sorted_logs, selector)
+    selector = parse_to_size(selector)
+    puts "deleting less than #{selector} bytes"
+    sorted_logs.each do |log|
+      if File.info(log[1]).size < selector
+        if config.dry_run?
+          puts "Would delete #{log[1]}"
+        else
+          File.delete(log[1])
+        end
+      end
+    end
+  end
+
+  def parse_to_size(selector)
+    parts = /^\s*(\d+)\s*([bBkKmMgG]*)/.match(selector.to_s)
+    return 1024 if parts.nil?
+
+    number_part = parts[1].to_i?
+    return 1024 unless number_part
+
+    unit_part = parts[2]? ? parts[2].downcase : "b"
+
+    case unit_part
+    when "b"
+      number_part.to_i
+    when "k", "kb"
+      number_part.to_i * 1024
+    when "m", "mb"
+      number_part.to_i * 1024 * 1024
+    when "g", "gb"
+      number_part.to_i * 1024 * 1024 * 1024
+    else
+      number_part
+    end
+  end
+
+  def do_prune_range(sorted_logs, selector)
+    range_parts = /^\s*(\d*)\s*\.\.\s*(\d*)\s*$/.match(selector.to_s)
+    if range_parts
+      start = range_parts[1].to_i? ? range_parts[1].to_i : 0
+      finish = range_parts[2].to_i? ? range_parts[2].to_i : sorted_logs.size - 1
+
+      if start > finish
+        start, finish = finish, start
+      end
+
+      sorted_logs.reverse[start..finish].each do |log|
+        if config.dry_run?
+          puts "Would delete #{log[1]}"
+        else
+          File.delete(log[1])
+        end
+      end
+    else
+      selector.split(",").each do |index|
+        index = index.to_i?
+        if index && index > 0 && index <= sorted_logs.size
+          log = sorted_logs[-index]
+          if config.dry_run?
+            puts "Would delete #{log[1]}"
+          else
+            File.delete(log[1])
+          end
+        end
+      end
+    end
   end
 
   # -----
