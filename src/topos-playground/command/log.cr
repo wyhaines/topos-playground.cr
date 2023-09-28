@@ -71,7 +71,6 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
   end
 
   def do_view
-    logs = log_sort(handle_erroneously_old_logs(generate_base_list))
     config.parameter = "index:1" unless config.parameter?
     operation, selector = config.parameter?.to_s.split(":", 2)
 
@@ -82,27 +81,39 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
 
       case operation
       when "index"
-        selector = selector.to_s.to_i < 1 ? 1 : selector.to_s.to_i
-        selector = sorted_logs.size if selector > sorted_logs.size
-
-        show_log_file(sorted_logs[-selector])
+        do_view_index(sorted_logs, selector)
       when "before"
-        selector = Time.local if selector.to_s.empty?
-        limit_date = ParseDate.parse(selector.to_s)
-
-        if limit_date
-          log = sorted_logs.reverse.find { |log| log[2] < limit_date }
-          show_log_file(log) if log
-        end
+        do_view_before(sorted_logs, selector)
       when "after"
-        selector = Time.unix(0).to_s if selector.to_s.empty?
-        limit_date = ParseDate.parse(selector.to_s)
-
-        if limit_date
-          log = sorted_logs.find { |log| log[2] > limit_date }
-          show_log_file(log) if log
-        end
+        do_view_after(sorted_logs, selector)
       end
+    end
+  end
+
+  def do_view_index(sorted_logs, selector)
+    selector = selector.to_s.to_i < 1 ? 1 : selector.to_s.to_i
+    selector = sorted_logs.size if selector > sorted_logs.size
+
+    show_log_file(sorted_logs[-selector])
+  end
+
+  def do_view_before(sorted_logs, selector)
+    selector = Time.local if selector.to_s.empty?
+    limit_date = ParseDate.parse(selector.to_s)
+
+    if limit_date
+      log = sorted_logs.reverse.find { |_log| _log[2] < limit_date }
+      show_log_file(log) if log
+    end
+  end
+
+  def do_view_after(sorted_logs, selector)
+    selector = Time.unix(0).to_s if selector.to_s.empty?
+    limit_date = ParseDate.parse(selector.to_s)
+
+    if limit_date
+      log = sorted_logs.find { |_log| _log[2] > limit_date }
+      show_log_file(log) if log
     end
   end
 
@@ -123,7 +134,7 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
 
   def generate_base_list : Array(Tuple(String, String, Time))
     files = Dir["#{config.log_dir.as(String)}/**"]
-    files.map do |file|
+    files.compact_map do |file|
       if match = UUID_REGEXP.match(file)
         begin
           {match[1], file, CSUUID.new(match[1]).timestamp}
@@ -131,26 +142,25 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
           {match[1], file, File.info(file).modification_time}
         end
       end
-    end.compact
+    end
   end
 
   def handle_erroneously_old_logs(logs) : Array(Tuple(String, String, Time))
     # Anything with a prefix larger than this must be a log file from the Node.js version of the playground.
     current_prefix = CSUUID.new.to_s[0..7]
 
-    logs.map do |log|
+    logs.compact_map do |log|
       if log[0][0..7] > current_prefix
         {log[0], log[1], File.info(log[1]).modification_time}
       else
         log
       end
-    end.compact
+    end
   end
 
   def calculate_gaps_and_standard_deviation(logs)
-    sum = 0_i64
+    sum = 0_i128
     gaps = [] of Int64
-    std_dev = 0
 
     n = logs.size - 1
     while n > 0
@@ -162,6 +172,7 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
 
     average = sum / gaps.size
 
+    # ameba:disable Lint/ShadowingOuterLocalVar
     sum_of_squared_differences = gaps.reduce(0_i128) { |sum, length| sum + (length - average)**2 }
     standard_deviation = Math.sqrt(sum_of_squared_differences / gaps.size)
 
