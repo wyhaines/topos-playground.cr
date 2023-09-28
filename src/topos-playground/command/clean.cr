@@ -7,6 +7,10 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
     end
   end
 
+  def self.log_to_file?(config)
+    true
+  end
+
   def run
     Log.for("stdout").info { "Cleaning up Topos-Playground...\n" }
 

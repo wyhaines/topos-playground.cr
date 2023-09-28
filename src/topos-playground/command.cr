@@ -22,7 +22,17 @@ class ToposPlayground
     property config : Config
     class_property config : Config = ToposPlayground::Config.new
 
+    # This class method is called when the playground is setting up its command line parser.
+    # Any subclass can implement this method to add its own command line flags.
     def self.options(parser, config)
+    end
+
+    # For some commands, writing a physical log of execution isn't necessary. This class
+    # method will be called on the command before the playground sets up the physical log,
+    # and if it returns `false`, the physical log will not be created. Subclasses that
+    # should log to a physical file should override this method to return `true`.
+    def self.log_to_file?(config)
+      false
     end
 
     def initialize(config)

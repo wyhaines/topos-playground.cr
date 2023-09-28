@@ -30,16 +30,18 @@ class ToposPlayground
   end
 
   def setup_all_logging
-    Log.builder.bind(
-      "stdout", :trace,
-      Log::IOBackend.new(
-        get_log_file,
-        dispatcher: Log::DirectDispatcher))
-    Log.builder.bind(
-      "error",
-      :debug,
-      Log::IOBackend.new(
-        get_log_file,
-        dispatcher: Log::DirectDispatcher))
+    if ToposPlayground.command.try &.log_to_file?(config)
+      Log.builder.bind(
+        "stdout", :trace,
+        Log::IOBackend.new(
+          get_log_file,
+          dispatcher: Log::DirectDispatcher))
+      Log.builder.bind(
+        "error",
+        :debug,
+        Log::IOBackend.new(
+          get_log_file,
+          dispatcher: Log::DirectDispatcher))
+    end
   end
 end

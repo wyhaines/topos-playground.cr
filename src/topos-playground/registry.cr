@@ -26,6 +26,10 @@ class ToposPlayground
       @@name_to_class_map[key]
     end
 
+    def self.[]?(key)
+      @@name_to_class_map[key]?
+    end
+
     def self.get(key)
       self[key]
     end

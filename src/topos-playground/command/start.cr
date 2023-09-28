@@ -42,6 +42,10 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     end
   end
 
+  def self.log_to_file?(config)
+    true
+  end
+
   def run
     background_processes = [] of Tuple(Channel(Bool), Channel(String), Process)
 

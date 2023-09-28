@@ -19,6 +19,9 @@ dependencies:
     github: wyhaines/csuuid.cr
   defined:
     github: wyhaines/defined.cr
+  parse_date:
+    github: wyhaines/ParseDate.cr
+
 
 
 development_dependencies:
