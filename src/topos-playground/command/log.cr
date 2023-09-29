@@ -275,18 +275,45 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
   # or in a comma separated list.
   def do_prune_range(sorted_logs, selector)
     range_parts = /^\s*(\d*)\s*\.\.\s*(\d*)\s*$/.match(selector.to_s)
-    count = 0
-    if range_parts
-      start = range_parts[1].to_i? ? range_parts[1].to_i - 1 : 0
-      finish = range_parts[2].to_i? ? range_parts[2].to_i - 1 : sorted_logs.size - 1
-      start = 0 if start < 0
-      finish = sorted_logs.size - 1 if finish >= sorted_logs.size
-
-      if start > finish
-        start, finish = finish, start
+    show_deletion_count(
+      if range_parts
+        do_prune_range_range_parts(sorted_logs, range_parts)
+      else
+        do_prune_range_selector_split(sorted_logs, selector)
       end
+    )
+  end
 
-      sorted_logs.reverse[start..finish].each do |log|
+  private def do_prune_range_range_parts(sorted_logs, range_parts)
+    start = range_parts[1].to_i? ? range_parts[1].to_i - 1 : 0
+    finish = range_parts[2].to_i? ? range_parts[2].to_i - 1 : sorted_logs.size - 1
+    start = 0 if start < 0
+    finish = sorted_logs.size - 1 if finish >= sorted_logs.size
+
+    if start > finish
+      start, finish = finish, start
+    end
+
+    count = 0
+    sorted_logs.reverse[start..finish].each do |log|
+      count += 1
+      if config.dry_run?
+        Log.for("stdout").info { "Would delete #{log[1]}" }
+      else
+        Log.for("stdout").info { "Deleting #{log[1]}" } if config.verbose?
+        File.delete(log[1])
+      end
+    end
+
+    count
+  end
+
+  private def do_prune_range_selector_split(sorted_logs, selector)
+    count = 0
+    selector.split(",").each do |index|
+      index = index.to_i?
+      if index && index > 0 && index <= sorted_logs.size
+        log = sorted_logs[-index]
         count += 1
         if config.dry_run?
           Log.for("stdout").info { "Would delete #{log[1]}" }
@@ -295,23 +322,9 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
           File.delete(log[1])
         end
       end
-    else
-      selector.split(",").each do |index|
-        index = index.to_i?
-        if index && index > 0 && index <= sorted_logs.size
-          log = sorted_logs[-index]
-          count += 1
-          if config.dry_run?
-            Log.for("stdout").info { "Would delete #{log[1]}" }
-          else
-            Log.for("stdout").info { "Deleting #{log[1]}" } if config.verbose?
-            File.delete(log[1])
-          end
-        end
-      end
     end
 
-    show_deletion_count(count)
+    count
   end
 
   # -----
