@@ -1,5 +1,22 @@
 class ToposPlayground
   # ameba:disable Metrics/CyclomaticComplexity
+
+  # This is a helper function for nicely formatting the text output from topos-playground.
+  # It takes a string and breaks it into lines of a maximum length, inserting newlines
+  # where necessary. It also attempts to break lines at word boundaries, and to avoid
+  # breaking lines in the middle of words. It does this by calculating the average word
+  # length and standard deviation of word length, and using these to determine the maximum
+  # word length to allow before breaking.
+  #
+  # Words that are longer than the maximum word length (i.e. a word length that is larger
+  # than typical, and which would thus cause the text appearance to be peculiar, with a
+  # large end-of-line gap) are broken at a point that is 30-70% of the way through the word,
+  # using a hyphen. The algorithm also refuses to break a word that starts with a non-letter
+  # character, to avoid breaking things like directory paths.
+  #
+  # Finally, the algorithm maintains the indetation at the start of a line, when a line is
+  # broken into multiple lines. This maintains text formatting, such as when examples are
+  # being provided in an indented section.)
   def self.break_text(str : String, max_line_length : Int32 = 80) : String
     return str if max_line_length <= 0
 
