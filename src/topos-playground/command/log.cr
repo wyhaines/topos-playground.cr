@@ -87,6 +87,10 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     end
   end
 
+  def self.log_to_file?(config)
+    config.subcommand? == "prune"
+  end
+
   # Act on the log subcommand (`list`, `view`, or `prune`).
   def run
     case config.subcommand?
@@ -205,31 +209,40 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     selector = selector.to_s.to_i { 0 } <= 0 ? 0 : selector.to_s.to_i
     beginning_of_day = Time.local.at_beginning_of_day
     threshold = beginning_of_day - Time::Span.new(seconds: selector * 24 * 60 * 60)
+    count = 0
     sorted_logs.each do |log|
       if log[2] < threshold
+        count += 1
         if config.dry_run?
-          puts "Would delete #{log[1]}"
+          Log.for("stdout").info { "Would delete #{log[1]}" }
         else
+          Log.for("stdout").info { "Deleting #{log[1]}" } if config.verbose?
           File.delete(log[1])
         end
       end
     end
+
+    show_deletion_count(count)
   end
 
   # Delete log files smaller than the specified size. This is useful for getting rid
   # of log files that are empty, or that contain only a few lines of output.
   def do_prune_size(sorted_logs, selector)
     selector = parse_to_size(selector)
-    puts "deleting less than #{selector} bytes"
+    count = 0
     sorted_logs.each do |log|
       if File.info(log[1]).size < selector
+        count += 1
         if config.dry_run?
-          puts "Would delete #{log[1]}"
+          Log.for("stdout").info { "Would delete #{log[1]}" }
         else
+          Log.for("stdout").info { "Deleting #{log[1]}" } if config.verbose?
           File.delete(log[1])
         end
       end
     end
+
+    show_deletion_count(count)
   end
 
   # Parse a size selector, which can be a number, or a number followed by a unit,
@@ -262,18 +275,23 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
   # or in a comma separated list.
   def do_prune_range(sorted_logs, selector)
     range_parts = /^\s*(\d*)\s*\.\.\s*(\d*)\s*$/.match(selector.to_s)
+    count = 0
     if range_parts
-      start = range_parts[1].to_i? ? range_parts[1].to_i : 0
-      finish = range_parts[2].to_i? ? range_parts[2].to_i : sorted_logs.size - 1
+      start = range_parts[1].to_i? ? range_parts[1].to_i - 1 : 0
+      finish = range_parts[2].to_i? ? range_parts[2].to_i - 1 : sorted_logs.size - 1
+      start = 0 if start < 0
+      finish = sorted_logs.size - 1 if finish >= sorted_logs.size
 
       if start > finish
         start, finish = finish, start
       end
 
       sorted_logs.reverse[start..finish].each do |log|
+        count += 1
         if config.dry_run?
-          puts "Would delete #{log[1]}"
+          Log.for("stdout").info { "Would delete #{log[1]}" }
         else
+          Log.for("stdout").info { "Deleting #{log[1]}" } if config.verbose?
           File.delete(log[1])
         end
       end
@@ -282,23 +300,32 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
         index = index.to_i?
         if index && index > 0 && index <= sorted_logs.size
           log = sorted_logs[-index]
+          count += 1
           if config.dry_run?
-            puts "Would delete #{log[1]}"
+            Log.for("stdout").info { "Would delete #{log[1]}" }
           else
+            Log.for("stdout").info { "Deleting #{log[1]}" } if config.verbose?
             File.delete(log[1])
           end
         end
       end
     end
+
+    show_deletion_count(count)
   end
 
   # -----
 
+  # Output the number of deleted files.
+  def show_deletion_count(count)
+    Log.for("stdout").info { "Deleted #{count} log files." }
+  end
+
   # Display the given log file.
   def show_log_file(log)
-    puts log[1].center(ToposPlayground.terminal_width).colorize(:green)
-    puts "-------".center(ToposPlayground.terminal_width).colorize(:green)
-    puts File.read(log[1])
+    Log.for("stdout").info { log[1].center(ToposPlayground.terminal_width) }
+    Log.for("stdout").info { "-------".center(ToposPlayground.terminal_width) }
+    Log.for("stdout").info { File.read(log[1]) }
   end
 
   private def log_sort(logs)
@@ -307,7 +334,7 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
 
   # Perform the first pass at creating a list of log files.
   def generate_base_list : Array(Tuple(String, String, Time))
-    files = Dir["#{config.log_dir.as(String)}/**"]
+    files = Dir["#{config.log_dir.as(String)}/**"].reject { |file| File.exists?(config.log_file_path.to_s) && File.same?(config.log_file_path.to_s, file)}
     files.compact_map do |file|
       if match = UUID_REGEXP.match(file)
         begin
@@ -373,6 +400,12 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     end.compact
   end
 
+  # Print the sorted list of logs.
+  #
+  # This is comprised of a header, and then a line for each log file. If the single-line format
+  # is too wide for the terminal, the multi-line format will be used. Regarding, though, line
+  # wrapping is still applied, so that everything stays relatively formatted, even on small 
+  # terminal windows.
   def print_logs(logs)
     print_header(logs)
 
@@ -382,13 +415,17 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
              else
                single_line(log, logs.size - index)
              end
-      puts ToposPlayground.break_text(
+      Log.for("stdout").info { ToposPlayground.break_text(
         line,
         ToposPlayground.terminal_width
-      )
+      ) }
     end
   end
 
+  # print the header for the sorted list of logs
+  #
+  # There are two formats for the header, depending on whether the logs will be printed in single
+  # line format or multi-line format.
   def print_header(logs)
     header = if single_line_size(logs.first) > ToposPlayground.terminal_width
                multi_line_header(logs)
@@ -396,12 +433,18 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
                single_line_header(logs)
              end
 
-    puts ToposPlayground.break_text(
+    Log.for("stdout").info { ToposPlayground.break_text(
       header,
       ToposPlayground.terminal_width
-    )
+    ) }
   end
 
+  # Build the single-line header.
+  #
+  # ```
+  #  #                                             Log File Path                                                             File Date                File Size
+  # ```
+  #
   def single_line_header(logs)
     String.build do |str|
       str << " #".ljust(7)
@@ -413,6 +456,13 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     end
   end
 
+  # Build the multi-line header.
+  #
+  # ```
+  #  #                                             Log File Path
+  #                   File Date                File Size 
+  # ```
+  #
   def multi_line_header(logs)
     String.build do |str|
       str << " #".ljust(7)
@@ -425,51 +475,51 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     end
   end
 
-  def log_file_path_header
+  private def log_file_path_header
     "Log File Path"
   end
 
-  def log_file_date_header
+  private def log_file_date_header
     "File Date"
   end
 
-  def log_file_size_header
+  private def log_file_size_header
     "File Size"
   end
 
-  def log_file_path(log)
+  private def log_file_path(log)
     log[1]
   end
 
-  def file_to_date_delimiter
+  private def file_to_date_delimiter
     "    ->    "
   end
 
-  def short_file_to_date_delimiter
+  private def short_file_to_date_delimiter
     "    ->  "
   end
 
-  def log_file_date(log)
+  private def log_file_date(log)
     log[2].to_s.ljust(30)
   end
 
-  def date_to_size_delimiter
+  private def date_to_size_delimiter
     "  :  "
   end
 
-  def single_line_size(log)
+  private def single_line_size(log)
     7 + log_file_path(log).size + file_to_date_delimiter.size + log_file_date(log).size + 12
   end
 
-  def log_file_size(log)
+  private def log_file_size(log)
     File.info(log_file_path(log)).size.humanize_bytes
   end
 
-  def format_index(index)
+  private def format_index(index)
     "#{index.to_s.ljust(5)}) "
   end
 
-  def single_line(log, index)
+  private def single_line(log, index)
     String.build do |str|
       str << format_index(index)
       str << log_file_path(log)
@@ -480,7 +530,7 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     end
   end
 
-  def multi_line(log, index)
+  private def multi_line(log, index)
     String.build do |str|
       str << format_index(index)
       str << log_file_path(log)
