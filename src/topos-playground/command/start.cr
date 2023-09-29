@@ -408,7 +408,6 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
 
   # Everything is done; display some final information to the user.
   def completion_banner
-    Fiber.yield
     banner = <<-EBANNER
 
     🔥 Everything is done! 🔥

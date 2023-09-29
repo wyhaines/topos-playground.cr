@@ -19,6 +19,7 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
     shutdown_erc20_messagine_protocol_infra
     shutdown_redis
     remove_working_directory
+    completion_banner
   end
 
   def verify_working_directory
@@ -131,5 +132,19 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
   rescue ex
     Error.error { "XFailed to clean up the working directory (#{config.working_dir}): #{ex}" }
     exit 1
+  end
+
+  def completion_banner
+    banner = <<-EBANNER
+
+    🔥 The Topos Playground is down 🔥
+
+    ❗Important❗
+    Before starting the Topos Playground again, you must reset your MetaMask Account Data in order
+    to reset the nonce count. Refer to "https://support.metamask.io/hc/en-us/articles/360015488891-How-to-clear-your-account-activity-reset-account" for more information.
+
+    EBANNER
+
+    Log.for("stdout").info { banner }
   end
 end
