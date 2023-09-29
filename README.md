@@ -1,3 +1,7 @@
+![Topos Playground CI](https://img.shields.io/github/actions/workflow/status/wyhaines/topos-playground.cr/ci.yml?branch=main&style=for-the-badge&logo=GitHub)
+[![GitHub release](https://img.shields.io/github/release/wyhaines/topos-playground.cr.svg?style=for-the-badge)](https://github.com/wyhaines/topos-playground.cr/releases)
+![GitHub commits since latest release (by SemVer)](https://img.shields.io/github/commits-since/wyhaines/topos-playground.cr/latest?style=for-the-badge)
+
 <div id="top" />
 <br />
 <div align="center">
