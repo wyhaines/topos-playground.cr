@@ -13,6 +13,8 @@ class ToposPlayground
       REDIS_HOST=localhost
       REDIS_PORT=6379
       TOPOS_SUBNET_ENDPOINT=localhost:10002
+
+
       EENV
     end
   end

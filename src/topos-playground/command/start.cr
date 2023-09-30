@@ -428,7 +428,11 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   def setup_io_handlers_for_background_process(background_process)
     at_exit do
       kill_channel, _, process = background_process
-      process.terminate
+      begin
+        process.terminate
+      rescue ex : RuntimeError
+        # Ignore; the process may have already been terminated
+      end
       kill_channel.send(true)
     end
 

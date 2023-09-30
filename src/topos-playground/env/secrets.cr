@@ -22,6 +22,7 @@ class ToposPlayground
         KeyHash.each do |key, value|
           str << "export #{key}=#{value}\n"
         end
+        str << "\n"
       end
     end
 
