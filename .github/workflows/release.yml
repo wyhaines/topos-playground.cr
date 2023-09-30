@@ -28,6 +28,27 @@ jobs:
           name: topos-playground-darwin
           path: ./topos-playground-darwin.zip
 
+  build-macos-14:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Crystal
+        run: brew install openssl crystal
+      - name: Install dependencies
+        run: shards install
+      - name: Build the binary
+        run: |
+          ln -s /usr/lib/libxml2.2.dylib /usr/local/lib/liblibxml2.tbd.dylib
+          shards build --release --stats --progress
+      - name: Compress the binary
+        run: zip -rjX ./topos-playground-darwin.zip ./bin/topos-playground
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: topos-playground-darwin-macos14
+          path: ./topos-playground-darwin-macos14.zip
+
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -64,5 +85,6 @@ jobs:
         with:
           files: |
             ./artifacts/topos-playground-darwin/topos-playground-darwin.zip
+            ./artifacts/topos-playground-darwin-macos14/topos-playground-darwin-macos14.zip
             ./artifacts/topos-playground-linux-x86_64/topos-playground-linux-x86_64.gz
           token: ${{ secrets.GITHUB_TOKEN }}
