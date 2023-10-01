@@ -147,7 +147,7 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
     🔥 The Topos Playground is down 🔥
 
     ❗Important❗
-    Before starting the Topos Playground again, you must reset your MetaMask Account Data in order to reset the nonce count. Refer to "https://support.metamask.io/hc/en-us/articles/360015488891-How-to-clear-your-account-activity-reset-account" for more information.
+    Before starting the Topos Playground again, you must reset your MetaMask Account Data for each subnet (both Topos and Incal) in order to reset the nonce count. Refer to "https://support.metamask.io/hc/en-us/articles/360015488891-How-to-clear-your-account-activity-reset-account" for more information.
 
     EBANNER
 

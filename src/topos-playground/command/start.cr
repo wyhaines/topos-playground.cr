@@ -412,7 +412,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
 
     🔥 Everything is done! 🔥
 
-    🚀 Start sending ERC20 tokens across subnet by accessing the dApp Frontend at http://localhost:3001
+    🚀 Start sending ERC20 tokens across subnets by accessing the dApp Frontend at http://localhost:3001
 
     Ctrl/cmd-c will shut down the dApp Frontend and the Executor Service BUT will keep subnets and the TCE running (use the clean command to shut them down)
 
