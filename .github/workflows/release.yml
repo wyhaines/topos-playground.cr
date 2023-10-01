@@ -28,8 +28,8 @@ jobs:
           name: topos-playground-darwin
           path: ./topos-playground-darwin.zip
 
-  build-macos-14:
-    runs-on: macos-14
+  build-macos-13:
+    runs-on: macos-13
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -46,8 +46,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: topos-playground-darwin-macos14
-          path: ./topos-playground-darwin-macos14.zip
+          name: topos-playground-darwin-macos13
+          path: ./topos-playground-darwin-macos13.zip
 
   build-linux:
     runs-on: ubuntu-latest
@@ -72,7 +72,7 @@ jobs:
           path: ./bin/topos-playground-linux-x86_64.gz
 
   release:
-    needs: [build-macos, build-linux, build-macos-14]
+    needs: [build-macos, build-linux, build-macos-13]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
@@ -85,6 +85,6 @@ jobs:
         with:
           files: |
             ./artifacts/topos-playground-darwin/topos-playground-darwin.zip
-            ./artifacts/topos-playground-darwin-macos14/topos-playground-darwin-macos14.zip
+            ./artifacts/topos-playground-darwin-macos13/topos-playground-darwin-macos13.zip
             ./artifacts/topos-playground-linux-x86_64/topos-playground-linux-x86_64.gz
           token: ${{ secrets.GITHUB_TOKEN }}
