@@ -7,6 +7,10 @@ class ToposPlayground::Command::Version < ToposPlayground::Command
     end
   end
 
+  def self.levenshtein_options
+    {"version" => {} of String => Array(String)}
+  end
+
   def run
     puts "topos-playground version #{ToposPlayground::VERSION}"
     exit

@@ -42,6 +42,12 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
     end
   end
 
+  def self.levenshtein_options
+    {
+      "start" => {} of String => Array(String),
+    }
+  end
+
   def self.log_to_file?(config)
     true
   end

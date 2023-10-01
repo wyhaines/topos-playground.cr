@@ -30,6 +30,10 @@ class ToposPlayground
   end
 
   def setup_all_logging
+    if ToposPlayground.config.quiet?
+      Log.setup { |_| }
+    end
+
     if ToposPlayground.command.try &.log_to_file?(config)
       Log.builder.bind(
         "stdout", :trace,

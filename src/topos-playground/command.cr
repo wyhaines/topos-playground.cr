@@ -27,6 +27,13 @@ class ToposPlayground
     def self.options(parser, config)
     end
 
+    # If no command matches, the playground will attempt to find a command that might have
+    # been the intended command. Each `Command` subclass can subclass this class method in
+    # order to return a list of possible commands to use in the levenshtein matching process.
+    def self.levenshtein_options
+      Hash(String, Hash(String, Array(String))).new
+    end
+
     # For some commands, writing a physical log of execution isn't necessary. This class
     # method will be called on the command before the playground sets up the physical log,
     # and if it returns `false`, the physical log will not be created. Subclasses that

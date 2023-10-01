@@ -10,6 +10,12 @@ class ToposPlayground::Command::Clean < ToposPlayground::Command
     end
   end
 
+  def self.levenshtein_options
+    {
+      "clean" => {"--no-delete" => [] of String},
+    }
+  end
+
   def self.log_to_file?(config)
     true
   end

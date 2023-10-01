@@ -15,6 +15,26 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     end
   end
 
+  def self.levenshtein_options
+    {
+      "log" => {
+        "list" => [] of String,
+        "view" => [
+          "-i", "--index",
+          "-b", "--before",
+          "-a", "--after",
+        ],
+        "prune" => [
+          "--dry-run",
+          "-d", "--days",
+          "-s", "--size",
+          "-r", "--range",
+          "-a", "--all",
+        ],
+      },
+    }
+  end
+
   def self.list_options(parser, config)
     parser.on("list", "Show all of the log files that currently exist in the log directory") do
       config.subcommand = "list"
@@ -43,7 +63,7 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     parser.on("prune", "Prune log files from the log directory") do
       config.subcommand = "prune"
       parser.separator("\nLog Prune options:")
-      parser.on("-n", "--dry-run", "Do not actually delete any files. Just show what would be deleted.") do
+      parser.on("--dry-run", "Do not actually delete any files. Just show what would be deleted.") do
         config.dry_run = true
       end
       parser.on("-d [DAYS]", "--days [DAYS]", "Prune log files older than DAYS days. Defaults to 7 days.") do |days|
@@ -82,7 +102,7 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
         end
       end
       parser.on("-a", "--all", "Prune all log files.") do
-        config.parameter = "all"
+        config.parameter = "all:"
       end
     end
   end
@@ -200,6 +220,8 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
         do_prune_size(sorted_logs, selector)
       when "range"
         do_prune_range(sorted_logs, selector)
+      when "all"
+        do_prune_all(sorted_logs, selector)
       end
     end
   end
@@ -325,6 +347,21 @@ class ToposPlayground::Command::Logs < ToposPlayground::Command
     end
 
     count
+  end
+
+  private def do_prune_all(sorted_logs, selector)
+    count = 0
+    sorted_logs.each do |log|
+      count += 1
+      if config.dry_run?
+        Log.for("stdout").info { "Would delete #{log[1]}" }
+      else
+        Log.for("stdout").info { "Deleting #{log[1]}" } if config.verbose?
+        File.delete(log[1])
+      end
+    end
+
+    show_deletion_count(count)
   end
 
   # -----
