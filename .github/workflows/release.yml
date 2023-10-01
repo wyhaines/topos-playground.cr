@@ -72,7 +72,7 @@ jobs:
           path: ./bin/topos-playground-linux-x86_64.gz
 
   release:
-    needs: [build-macos, build-linux]
+    needs: [build-macos, build-linux, build-macos-14]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
