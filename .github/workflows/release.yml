@@ -42,7 +42,7 @@ jobs:
           ln -s /usr/lib/libxml2.2.dylib /usr/local/lib/liblibxml2.tbd.dylib
           shards build --release --stats --progress
       - name: Compress the binary
-        run: zip -rjX ./topos-playground-darwin.zip ./bin/topos-playground
+        run: zip -rjX ./topos-playground-darwin-macos13.zip ./bin/topos-playground
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
