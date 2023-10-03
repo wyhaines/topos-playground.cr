@@ -20,6 +20,8 @@
 
 The Topos Playground is a CLI that allows you to easily run and manage a local Topos devnet. The components that it runs on your behalf depend on Docker, Docker Compose, and NodeJS to locally run multiple subnets, multiple TCE nodes, and a dApp with supporting infrastructure, capable of cross-subnet messaging. For official documentation about Topos and about the official Playground CLI, take a look at the [Topos Developer Portal](https://docs.topos.technology).
 
+This document, along with API documentation of this implementation of the Topos Playground can also be accessed at [https://wyhaines.github.io/topos-playground.cr/](https://wyhaines.github.io/topos-playground.cr/).
+
 ### Requirements
 
 - [Docker](https://docs.docker.com/get-docker/_) version 17.06.0 or greater
