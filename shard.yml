@@ -21,6 +21,8 @@ dependencies:
     github: wyhaines/defined.cr
   parse_date:
     github: wyhaines/ParseDate.cr
+  config:
+    github: wyhaines/config.cr
 
 
 

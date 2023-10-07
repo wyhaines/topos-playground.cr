@@ -1,5 +1,6 @@
 require "term-screen"
 require "file_utils"
+require "config"
 require "./topos-playground/*"
 
 # class Log::Builder
@@ -16,8 +17,8 @@ require "./topos-playground/*"
 class ToposPlayground
   @@terminal_width = -1
 
-  property config : ToposPlayground::Config = ToposPlayground::Config.new
-  @@config : ToposPlayground::Config = ToposPlayground::Config.new
+  property config : Config = Config.new
+  @@config : Config = Config.new
 
   alias Error = ErrorLog
 

@@ -1,5 +1,4 @@
 require "log"
-require "./config"
 require "./command_registry"
 require "./error_log"
 
@@ -20,7 +19,7 @@ class ToposPlayground
     end
 
     property config : Config
-    class_property config : Config = ToposPlayground::Config.new
+    class_property config : Config = Config.new
 
     # This class method is called when the playground is setting up its command line parser.
     # Any subclass can implement this method to add its own command line flags.
