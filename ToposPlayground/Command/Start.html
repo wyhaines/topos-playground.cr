@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.9.2">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="topos-playground.cr">
+
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+  <meta name="repository-name" content="topos-playground.cr">
+  <title>ToposPlayground::Command::Start - topos-playground.cr main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../index.html">
+          topos-playground.cr
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="topos-playground.cr/OptionParser" data-name="optionparser">
+      <a href="../../OptionParser.html">OptionParser</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/SemanticVersion" data-name="semanticversion">
+      <a href="../../SemanticVersion.html">SemanticVersion</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="topos-playground.cr/ToposPlayground" data-name="toposplayground">
+      <a href="../../ToposPlayground.html">ToposPlayground</a>
+      
+        <ul>
+  
+  <li class="parent open current" data-id="topos-playground.cr/ToposPlayground/Command" data-name="toposplayground::command">
+      <a href="../../ToposPlayground/Command.html">Command</a>
+      
+        <ul>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Clean" data-name="toposplayground::command::clean">
+      <a href="../../ToposPlayground/Command/Clean.html">Clean</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Error" data-name="toposplayground::command::error">
+      <a href="../../ToposPlayground/Command/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Log" data-name="toposplayground::command::log">
+      <a href="../../ToposPlayground/Command/Log.html">Log</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Logs" data-name="toposplayground::command::logs">
+      <a href="../../ToposPlayground/Command/Logs.html">Logs</a>
+      
+    </li>
+  
+  <li class=" current" data-id="topos-playground.cr/ToposPlayground/Command/Start" data-name="toposplayground::command::start">
+      <a href="../../ToposPlayground/Command/Start.html">Start</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Version" data-name="toposplayground::command::version">
+      <a href="../../ToposPlayground/Command/Version.html">Version</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/CommandRegistry" data-name="toposplayground::commandregistry">
+      <a href="../../ToposPlayground/CommandRegistry.html">CommandRegistry</a>
+      
+    </li>
+  
+  <li class="parent " data-id="topos-playground.cr/ToposPlayground/Env" data-name="toposplayground::env">
+      <a href="../../ToposPlayground/Env.html">Env</a>
+      
+        <ul>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/DappBackend" data-name="toposplayground::env::dappbackend">
+      <a href="../../ToposPlayground/Env/DappBackend.html">DappBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/DappFrontend" data-name="toposplayground::env::dappfrontend">
+      <a href="../../ToposPlayground/Env/DappFrontend.html">DappFrontend</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/ExecutorService" data-name="toposplayground::env::executorservice">
+      <a href="../../ToposPlayground/Env/ExecutorService.html">ExecutorService</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/Secrets" data-name="toposplayground::env::secrets">
+      <a href="../../ToposPlayground/Env/Secrets.html">Secrets</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/EnvRegistry" data-name="toposplayground::envregistry">
+      <a href="../../ToposPlayground/EnvRegistry.html">EnvRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Error" data-name="toposplayground::error">
+      <a href="../../ToposPlayground/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/ErrorLog" data-name="toposplayground::errorlog">
+      <a href="../../ToposPlayground/ErrorLog.html">ErrorLog</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Registry" data-name="toposplayground::registry">
+      <a href="../../ToposPlayground/Registry.html">Registry</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/StderrConsoleFormat" data-name="toposplayground::stderrconsoleformat">
+      <a href="../../ToposPlayground/StderrConsoleFormat.html">StderrConsoleFormat</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/StdoutConsoleFormat" data-name="toposplayground::stdoutconsoleformat">
+      <a href="../../ToposPlayground/StdoutConsoleFormat.html">StdoutConsoleFormat</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> ToposPlayground::<wbr>Command::<wbr>Start
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../ToposPlayground/Command/Start.html">ToposPlayground::Command::Start</a></li><li class="superclass"><a href="../../ToposPlayground/Command.html">ToposPlayground::Command</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L6" target="_blank">
+        topos-playground/command/start.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="DOCKER_COMPOSE_VERSION_REGEXP">
+        <strong>DOCKER_COMPOSE_VERSION_REGEXP</strong> = <code><span class="s">/Docker Compose version v([0-9]+\.[0-9]+\.[0-9]+)/</span>m</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="DOCKER_VERSION_REGEXP">
+        <strong>DOCKER_VERSION_REGEXP</strong> = <code><span class="s">/Docker version ([0-9]+\.[0-9]+\.[0-9]+)/</span>m</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="GIT_REPOS">
+        <strong>GIT_REPOS</strong> = <code>{ {org: <span class="s">&quot;topos-protocol&quot;</span>, repo: <span class="s">&quot;local-erc20-messaging-infra&quot;</span>, branch: <span class="s">&quot;v0.1.8&quot;</span>}, {org: <span class="s">&quot;topos-protocol&quot;</span>, repo: <span class="s">&quot;dapp-frontend-erc20-messaging&quot;</span>, branch: <span class="s">&quot;v0.1.6&quot;</span>}, {org: <span class="s">&quot;topos-protocol&quot;</span>, repo: <span class="s">&quot;executor-service&quot;</span>, branch: <span class="s">&quot;v0.2.1&quot;</span>} }</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="GIT_VERSION_REGEXP">
+        <strong>GIT_VERSION_REGEXP</strong> = <code><span class="s">/git version ([0-9]+\.[0-9]+\.[0-9]+)/</span>m</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="MIN_VERSION_DOCKER">
+        <strong>MIN_VERSION_DOCKER</strong> = <code><span class="t">SemanticVersion</span>.parse(<span class="s">&quot;17.06.0&quot;</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="MIN_VERSION_DOCKER_COMPOSE">
+        <strong>MIN_VERSION_DOCKER_COMPOSE</strong> = <code><span class="t">SemanticVersion</span>.parse(<span class="s">&quot;2.0.0&quot;</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="MIN_VERSION_GIT">
+        <strong>MIN_VERSION_GIT</strong> = <code><span class="t">SemanticVersion</span>.parse(<span class="s">&quot;2.0.0&quot;</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="MIN_VERSION_NODEJS">
+        <strong>MIN_VERSION_NODEJS</strong> = <code><span class="t">SemanticVersion</span>.parse(<span class="s">&quot;16.0.0&quot;</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NODEJS_VERSION_REGEXP">
+        <strong>NODEJS_VERSION_REGEXP</strong> = <code><span class="s">/v([0-9]+\.[0-9]+\.[0-9]+)/</span>m</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="REDIS_CONTAINER_NAME">
+        <strong>REDIS_CONTAINER_NAME</strong> = <code><span class="s">&quot;redis-stack-server&quot;</span></code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#levenshtein_options-class-method" class="signature"><strong>.levenshtein_options</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#log_to_file%3F%28config%29-class-method" class="signature"><strong>.log_to_file?</strong>(config)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#options%28parser%2Cconfig%29-class-method" class="signature"><strong>.options</strong>(parser, config)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#build_dapp_frontend_service%28secrets_path%2Cdapp_frontend_service_path%29-instance-method" class="signature"><strong>#build_dapp_frontend_service</strong>(secrets_path, dapp_frontend_service_path)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#clone_git_repositories-instance-method" class="signature"><strong>#clone_git_repositories</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#completion_banner-instance-method" class="signature"><strong>#completion_banner</strong></a>
+        
+          <div class="summary"><p>Everything is done; display some final information to the user.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#copy_env_files-instance-method" class="signature"><strong>#copy_env_files</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#copy_git_repositories_from_cache-instance-method" class="signature"><strong>#copy_git_repositories_from_cache</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#do_npm_install%28path%29-instance-method" class="signature"><strong>#do_npm_install</strong>(path)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#parse_contract_addresses_to_hash%28filename%29-instance-method" class="signature"><strong>#parse_contract_addresses_to_hash</strong>(filename)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#retrieve_and_write_contract_addresses_to_env-instance-method" class="signature"><strong>#retrieve_and_write_contract_addresses_to_env</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#run-instance-method" class="signature"><strong>#run</strong></a>
+        
+          <div class="summary"><p>All subclasses must implement <code><a href="../../ToposPlayground/Command/Start.html#run-instance-method">#run</a></code>, which is responsible for carrying out the logic of the command.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#run_dapp_frontend_service-instance-method" class="signature"><strong>#run_dapp_frontend_service</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#run_executor_service-instance-method" class="signature"><strong>#run_executor_service</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#run_local_erc20_messaging_infra-instance-method" class="signature"><strong>#run_local_erc20_messaging_infra</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#run_redis-instance-method" class="signature"><strong>#run_redis</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#setup_io_handlers_for_background_process%28background_process%29-instance-method" class="signature"><strong>#setup_io_handlers_for_background_process</strong>(background_process)</a>
+        
+          <div class="summary"><p>Setup an <code>at_exit</code> handler to ensure that the started processes are cleaned up upon <code>topos-playground</code> exiting.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#shell-instance-method" class="signature"><strong>#shell</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#start_dapp_frontend_service%28secrets_path%2Cdapp_frontend_service_path%29%3ATuple%28Channel%28Bool%29%2CChannel%28String%29%2CProcess%29-instance-method" class="signature"><strong>#start_dapp_frontend_service</strong>(secrets_path, dapp_frontend_service_path) : Tuple(Channel(Bool), Channel(String), Process)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#start_executor_service%28secrets_path%2Cexecutor_service_path%29%3ATuple%28Channel%28Bool%29%2CChannel%28String%29%2CProcess%29-instance-method" class="signature"><strong>#start_executor_service</strong>(secrets_path, executor_service_path) : Tuple(Channel(Bool), Channel(String), Process)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#sub_working_dir%28path%29-instance-method" class="signature"><strong>#sub_working_dir</strong>(path)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#update_repository%28repo_path%29-instance-method" class="signature"><strong>#update_repository</strong>(repo_path)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#validate_git_cache-instance-method" class="signature"><strong>#validate_git_cache</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#verify_dependency_installation-instance-method" class="signature"><strong>#verify_dependency_installation</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#verify_docker_compose_installation-instance-method" class="signature"><strong>#verify_docker_compose_installation</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#verify_docker_installation-instance-method" class="signature"><strong>#verify_docker_installation</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#verify_git_installation-instance-method" class="signature"><strong>#verify_git_installation</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#verify_nodejs_installation-instance-method" class="signature"><strong>#verify_nodejs_installation</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#version_check%28command%2Cversion%2Cversion_regexp%2Cformal_label%2Cinline_label%3Dnil%29-instance-method" class="signature"><strong>#version_check</strong>(command, version, version_regexp, formal_label, inline_label = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wait_for%28background_processes%29-instance-method" class="signature"><strong>#wait_for</strong>(background_processes)</a>
+        
+          <div class="summary"><p>Block, waiting for the watched processes to die.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../ToposPlayground/Command.html">ToposPlayground::Command</a></code></h3>
+  
+  
+    <a href="../../ToposPlayground/Command.html#config%3AConfig-instance-method" class="tooltip">
+      <span>config : Config</span>
+    config</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#config%3D%28config%3AConfig%29-instance-method" class="tooltip">
+      <span>config=(config : Config)</span>
+    config=</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#run-instance-method" class="tooltip">
+      <span>run</span>
+    run</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#run_process%28command%2Cchdir%3D%22.%22%2Cenv%3AProcess%3A%3AEnv%3Dnil%2Cshell%3ABool%3Dtrue%29-instance-method" class="tooltip">
+      <span>run_process(command, chdir = <span class="s">&quot;.&quot;</span>, env : Process::Env = <span class="n">nil</span>, shell : Bool = <span class="n">true</span>)<br/>run_process(command, chdir = <span class="s">&quot;.&quot;</span>, background : Bool = <span class="n">false</span>, env : Process::Env = <span class="n">nil</span>)</span>
+    run_process</a>
+    
+  
+
+
+    
+
+  <h3>Constructor methods inherited from class <code><a href="../../ToposPlayground/Command.html">ToposPlayground::Command</a></code></h3>
+  
+  
+    <a href="../../ToposPlayground/Command.html#new%28config%3AConfig%29-class-method" class="tooltip">
+      <span>new(config : Config)</span>
+    new</a>
+    
+  
+
+
+    
+
+  <h3>Class methods inherited from class <code><a href="../../ToposPlayground/Command.html">ToposPlayground::Command</a></code></h3>
+  
+  
+    <a href="../../ToposPlayground/Command.html#config%3AConfig-class-method" class="tooltip">
+      <span>config : Config</span>
+    config</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#config%3D%28config%3AConfig%29-class-method" class="tooltip">
+      <span>config=(config : Config)</span>
+    config=</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#levenshtein_options-class-method" class="tooltip">
+      <span>levenshtein_options</span>
+    levenshtein_options</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#log_to_file%3F%28config%29-class-method" class="tooltip">
+      <span>log_to_file?(config)</span>
+    log_to_file?</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#options%28parser%2Cconfig%29-class-method" class="tooltip">
+      <span>options(parser, config)</span>
+    options</a>, 
+    
+  
+    <a href="../../ToposPlayground/Command.html#run_process%28command%2Cchdir%3D%22.%22%2Cbackground%3ABool%3Dfalse%2Cenv%3AProcess%3A%3AEnv%3Dnil%29-class-method" class="tooltip">
+      <span>run_process(command, chdir = <span class="s">&quot;.&quot;</span>, background : Bool = <span class="n">false</span>, env : Process::Env = <span class="n">nil</span>)<br/>run_process(command, chdir = <span class="s">&quot;.&quot;</span>, env : Process::Env = <span class="n">nil</span>, shell : Bool = <span class="n">true</span>)</span>
+    run_process</a>
+    
+  
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="levenshtein_options-class-method">
+      <div class="signature">
+        
+        def self.<strong>levenshtein_options</strong>
+
+        <a class="method-permalink" href="#levenshtein_options-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L48" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="log_to_file?(config)-class-method">
+      <div class="signature">
+        
+        def self.<strong>log_to_file?</strong>(config)
+
+        <a class="method-permalink" href="#log_to_file%3F%28config%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L54" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="options(parser,config)-class-method">
+      <div class="signature">
+        
+        def self.<strong>options</strong>(parser, config)
+
+        <a class="method-permalink" href="#options%28parser%2Cconfig%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L42" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="build_dapp_frontend_service(secrets_path,dapp_frontend_service_path)-instance-method">
+      <div class="signature">
+        
+        def <strong>build_dapp_frontend_service</strong>(secrets_path, dapp_frontend_service_path)
+
+        <a class="method-permalink" href="#build_dapp_frontend_service%28secrets_path%2Cdapp_frontend_service_path%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L377" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="clone_git_repositories-instance-method">
+      <div class="signature">
+        
+        def <strong>clone_git_repositories</strong>
+
+        <a class="method-permalink" href="#clone_git_repositories-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L172" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="completion_banner-instance-method">
+      <div class="signature">
+        
+        def <strong>completion_banner</strong>
+
+        <a class="method-permalink" href="#completion_banner-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Everything is done; display some final information to the user.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L419" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="copy_env_files-instance-method">
+      <div class="signature">
+        
+        def <strong>copy_env_files</strong>
+
+        <a class="method-permalink" href="#copy_env_files-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L224" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="copy_git_repositories_from_cache-instance-method">
+      <div class="signature">
+        
+        def <strong>copy_git_repositories_from_cache</strong>
+
+        <a class="method-permalink" href="#copy_git_repositories_from_cache-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L212" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="do_npm_install(path)-instance-method">
+      <div class="signature">
+        
+        def <strong>do_npm_install</strong>(path)
+
+        <a class="method-permalink" href="#do_npm_install%28path%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L333" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="parse_contract_addresses_to_hash(filename)-instance-method">
+      <div class="signature">
+        
+        def <strong>parse_contract_addresses_to_hash</strong>(filename)
+
+        <a class="method-permalink" href="#parse_contract_addresses_to_hash%28filename%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L303" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="retrieve_and_write_contract_addresses_to_env-instance-method">
+      <div class="signature">
+        
+        def <strong>retrieve_and_write_contract_addresses_to_env</strong>
+
+        <a class="method-permalink" href="#retrieve_and_write_contract_addresses_to_env-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L275" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="run-instance-method">
+      <div class="signature">
+        
+        def <strong>run</strong>
+
+        <a class="method-permalink" href="#run-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../../ToposPlayground/Command.html">ToposPlayground::Command</a>
+            </div>
+          
+          <p>All subclasses must implement <code><a href="../../ToposPlayground/Command/Start.html#run-instance-method">#run</a></code>, which is responsible for carrying out the
+logic of the command.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L58" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="run_dapp_frontend_service-instance-method">
+      <div class="signature">
+        
+        def <strong>run_dapp_frontend_service</strong>
+
+        <a class="method-permalink" href="#run_dapp_frontend_service-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L406" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="run_executor_service-instance-method">
+      <div class="signature">
+        
+        def <strong>run_executor_service</strong>
+
+        <a class="method-permalink" href="#run_executor_service-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L366" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="run_local_erc20_messaging_infra-instance-method">
+      <div class="signature">
+        
+        def <strong>run_local_erc20_messaging_infra</strong>
+
+        <a class="method-permalink" href="#run_local_erc20_messaging_infra-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L256" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="run_redis-instance-method">
+      <div class="signature">
+        
+        def <strong>run_redis</strong>
+
+        <a class="method-permalink" href="#run_redis-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L316" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="setup_io_handlers_for_background_process(background_process)-instance-method">
+      <div class="signature">
+        
+        def <strong>setup_io_handlers_for_background_process</strong>(background_process)
+
+        <a class="method-permalink" href="#setup_io_handlers_for_background_process%28background_process%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Setup an <code>at_exit</code> handler to ensure that the started processes are cleaned up upon
+<code>topos-playground</code> exiting. Also spawn a fiber to monitor the processes and print
+any IO sent to the monitor channel.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L437" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="shell-instance-method">
+      <div class="signature">
+        
+        def <strong>shell</strong>
+
+        <a class="method-permalink" href="#shell-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L252" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="start_dapp_frontend_service(secrets_path,dapp_frontend_service_path):Tuple(Channel(Bool),Channel(String),Process)-instance-method">
+      <div class="signature">
+        
+        def <strong>start_dapp_frontend_service</strong>(secrets_path, dapp_frontend_service_path) : Tuple(Channel(Bool), Channel(String), Process)
+
+        <a class="method-permalink" href="#start_dapp_frontend_service%28secrets_path%2Cdapp_frontend_service_path%29%3ATuple%28Channel%28Bool%29%2CChannel%28String%29%2CProcess%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L393" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="start_executor_service(secrets_path,executor_service_path):Tuple(Channel(Bool),Channel(String),Process)-instance-method">
+      <div class="signature">
+        
+        def <strong>start_executor_service</strong>(secrets_path, executor_service_path) : Tuple(Channel(Bool), Channel(String), Process)
+
+        <a class="method-permalink" href="#start_executor_service%28secrets_path%2Cexecutor_service_path%29%3ATuple%28Channel%28Bool%29%2CChannel%28String%29%2CProcess%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L351" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="sub_working_dir(path)-instance-method">
+      <div class="signature">
+        
+        def <strong>sub_working_dir</strong>(path)
+
+        <a class="method-permalink" href="#sub_working_dir%28path%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L248" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="update_repository(repo_path)-instance-method">
+      <div class="signature">
+        
+        def <strong>update_repository</strong>(repo_path)
+
+        <a class="method-permalink" href="#update_repository%28repo_path%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L197" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="validate_git_cache-instance-method">
+      <div class="signature">
+        
+        def <strong>validate_git_cache</strong>
+
+        <a class="method-permalink" href="#validate_git_cache-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L156" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="verify_dependency_installation-instance-method">
+      <div class="signature">
+        
+        def <strong>verify_dependency_installation</strong>
+
+        <a class="method-permalink" href="#verify_dependency_installation-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L89" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="verify_docker_compose_installation-instance-method">
+      <div class="signature">
+        
+        def <strong>verify_docker_compose_installation</strong>
+
+        <a class="method-permalink" href="#verify_docker_compose_installation-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L112" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="verify_docker_installation-instance-method">
+      <div class="signature">
+        
+        def <strong>verify_docker_installation</strong>
+
+        <a class="method-permalink" href="#verify_docker_installation-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L105" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="verify_git_installation-instance-method">
+      <div class="signature">
+        
+        def <strong>verify_git_installation</strong>
+
+        <a class="method-permalink" href="#verify_git_installation-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L122" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="verify_nodejs_installation-instance-method">
+      <div class="signature">
+        
+        def <strong>verify_nodejs_installation</strong>
+
+        <a class="method-permalink" href="#verify_nodejs_installation-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L96" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="version_check(command,version,version_regexp,formal_label,inline_label=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>version_check</strong>(command, version, version_regexp, formal_label, inline_label = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#version_check%28command%2Cversion%2Cversion_regexp%2Cformal_label%2Cinline_label%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L131" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wait_for(background_processes)-instance-method">
+      <div class="signature">
+        
+        def <strong>wait_for</strong>(background_processes)
+
+        <a class="method-permalink" href="#wait_for%28background_processes%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Block, waiting for the watched processes to die. They may be killed manually,
+or via the <code>at_exit</code> handler that was created when they were started, and which
+is triggered by the <code>topos-playground</code> process exiting, such as when <code>ctrl-c</code> is
+pressed.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command/start.cr#L460" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

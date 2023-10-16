@@ -1,0 +1,68 @@
+name: Topos-Playground Release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Crystal
+        run: brew install openssl crystal && brew uninstall --ignore-dependencies llvm && brew install llvm@9
+      - name: Install dependencies
+        run: shards install
+      - name: Build the binary
+        env:
+          LLVM_CONFIG: /usr/local/opt/llvm@9/bin/llvm-config
+        run: |
+          ln -s /usr/lib/libxml2.2.dylib /usr/local/lib/liblibxml2.tbd.dylib
+          shards build --release --stats --progress
+      - name: Compress the binary
+        run: zip -rjX ./topos-playground-darwin.zip ./bin/topos-playground
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: topos-playground-darwin
+          path: ./topos-playground-darwin.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    container:
+      image: crystallang/crystal
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: shards install
+      - name: Build the binary
+        run: |
+          shards build --release --static --stats --progress
+      - name: Compress the binary
+        run: |
+          gzip -9 ./bin/topos-playground
+          mv ./bin/topos-playground.gz ./bin/topos-playground-linux-x86_64.gz
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: topos-playground-linux-x86_64
+          path: ./bin/topos-playground-linux-x86_64.gz
+
+  release:
+    needs: [build-macos, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: ./artifacts
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./artifacts/topos-playground-darwin/topos-playground-darwin.zip
+            ./artifacts/topos-playground-linux-x86_64/topos-playground-linux-x86_64.gz
+          token: ${{ secrets.RLS_TOKEN }}

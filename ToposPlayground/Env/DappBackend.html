@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.9.2">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="topos-playground.cr">
+
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+  <meta name="repository-name" content="topos-playground.cr">
+  <title>ToposPlayground::Env::DappBackend - topos-playground.cr main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../index.html">
+          topos-playground.cr
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="topos-playground.cr/OptionParser" data-name="optionparser">
+      <a href="../../OptionParser.html">OptionParser</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/SemanticVersion" data-name="semanticversion">
+      <a href="../../SemanticVersion.html">SemanticVersion</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="topos-playground.cr/ToposPlayground" data-name="toposplayground">
+      <a href="../../ToposPlayground.html">ToposPlayground</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="topos-playground.cr/ToposPlayground/Command" data-name="toposplayground::command">
+      <a href="../../ToposPlayground/Command.html">Command</a>
+      
+        <ul>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Clean" data-name="toposplayground::command::clean">
+      <a href="../../ToposPlayground/Command/Clean.html">Clean</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Error" data-name="toposplayground::command::error">
+      <a href="../../ToposPlayground/Command/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Log" data-name="toposplayground::command::log">
+      <a href="../../ToposPlayground/Command/Log.html">Log</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Logs" data-name="toposplayground::command::logs">
+      <a href="../../ToposPlayground/Command/Logs.html">Logs</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Start" data-name="toposplayground::command::start">
+      <a href="../../ToposPlayground/Command/Start.html">Start</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Version" data-name="toposplayground::command::version">
+      <a href="../../ToposPlayground/Command/Version.html">Version</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/CommandRegistry" data-name="toposplayground::commandregistry">
+      <a href="../../ToposPlayground/CommandRegistry.html">CommandRegistry</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="topos-playground.cr/ToposPlayground/Env" data-name="toposplayground::env">
+      <a href="../../ToposPlayground/Env.html">Env</a>
+      
+        <ul>
+  
+  <li class=" current" data-id="topos-playground.cr/ToposPlayground/Env/DappBackend" data-name="toposplayground::env::dappbackend">
+      <a href="../../ToposPlayground/Env/DappBackend.html">DappBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/DappFrontend" data-name="toposplayground::env::dappfrontend">
+      <a href="../../ToposPlayground/Env/DappFrontend.html">DappFrontend</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/ExecutorService" data-name="toposplayground::env::executorservice">
+      <a href="../../ToposPlayground/Env/ExecutorService.html">ExecutorService</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/Secrets" data-name="toposplayground::env::secrets">
+      <a href="../../ToposPlayground/Env/Secrets.html">Secrets</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/EnvRegistry" data-name="toposplayground::envregistry">
+      <a href="../../ToposPlayground/EnvRegistry.html">EnvRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Error" data-name="toposplayground::error">
+      <a href="../../ToposPlayground/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/ErrorLog" data-name="toposplayground::errorlog">
+      <a href="../../ToposPlayground/ErrorLog.html">ErrorLog</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Registry" data-name="toposplayground::registry">
+      <a href="../../ToposPlayground/Registry.html">Registry</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/StderrConsoleFormat" data-name="toposplayground::stderrconsoleformat">
+      <a href="../../ToposPlayground/StderrConsoleFormat.html">StderrConsoleFormat</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/StdoutConsoleFormat" data-name="toposplayground::stdoutconsoleformat">
+      <a href="../../ToposPlayground/StdoutConsoleFormat.html">StdoutConsoleFormat</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">struct</span> ToposPlayground::<wbr>Env::<wbr>DappBackend
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../ToposPlayground/Env/DappBackend.html">ToposPlayground::Env::DappBackend</a></li><li class="superclass"><a href="../../ToposPlayground/Env.html">ToposPlayground::Env</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env/dapp-backend.cr#L4" target="_blank">
+        topos-playground/env/dapp-backend.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#content-instance-method" class="signature"><strong>#content</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#path-instance-method" class="signature"><strong>#path</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from struct <code><a href="../../ToposPlayground/Env.html">ToposPlayground::Env</a></code></h3>
+  
+  
+    <a href="../../ToposPlayground/Env.html#content-instance-method" class="tooltip">
+      <span>content</span>
+    content</a>, 
+    
+  
+    <a href="../../ToposPlayground/Env.html#env%28env%3DENV.dup%29-instance-method" class="tooltip">
+      <span>env(env = <span class="t">ENV</span>.dup)</span>
+    env</a>, 
+    
+  
+    <a href="../../ToposPlayground/Env.html#initialize-instance-method" class="tooltip">
+      <span>initialize</span>
+    initialize</a>, 
+    
+  
+    <a href="../../ToposPlayground/Env.html#merge_env%28data%2Cenv%29-instance-method" class="tooltip">
+      <span>merge_env(data, env)</span>
+    merge_env</a>, 
+    
+  
+    <a href="../../ToposPlayground/Env.html#path-instance-method" class="tooltip">
+      <span>path</span>
+    path</a>
+    
+  
+
+
+    
+
+  <h3>Constructor methods inherited from struct <code><a href="../../ToposPlayground/Env.html">ToposPlayground::Env</a></code></h3>
+  
+  
+    <a href="../../ToposPlayground/Env.html#new-class-method" class="tooltip">
+      <span>new</span>
+    new</a>
+    
+  
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="content-instance-method">
+      <div class="signature">
+        
+        def <strong>content</strong>
+
+        <a class="method-permalink" href="#content-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env/dapp-backend.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="path-instance-method">
+      <div class="signature">
+        
+        def <strong>path</strong>
+
+        <a class="method-permalink" href="#path-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env/dapp-backend.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

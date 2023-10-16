@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.9.2">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="topos-playground.cr">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="topos-playground.cr">
+  <title>ToposPlayground - topos-playground.cr main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          topos-playground.cr
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="topos-playground.cr/OptionParser" data-name="optionparser">
+      <a href="OptionParser.html">OptionParser</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/SemanticVersion" data-name="semanticversion">
+      <a href="SemanticVersion.html">SemanticVersion</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="topos-playground.cr/ToposPlayground" data-name="toposplayground">
+      <a href="ToposPlayground.html">ToposPlayground</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="topos-playground.cr/ToposPlayground/Command" data-name="toposplayground::command">
+      <a href="ToposPlayground/Command.html">Command</a>
+      
+        <ul>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Clean" data-name="toposplayground::command::clean">
+      <a href="ToposPlayground/Command/Clean.html">Clean</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Error" data-name="toposplayground::command::error">
+      <a href="ToposPlayground/Command/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Log" data-name="toposplayground::command::log">
+      <a href="ToposPlayground/Command/Log.html">Log</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Logs" data-name="toposplayground::command::logs">
+      <a href="ToposPlayground/Command/Logs.html">Logs</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Start" data-name="toposplayground::command::start">
+      <a href="ToposPlayground/Command/Start.html">Start</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Command/Version" data-name="toposplayground::command::version">
+      <a href="ToposPlayground/Command/Version.html">Version</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/CommandRegistry" data-name="toposplayground::commandregistry">
+      <a href="ToposPlayground/CommandRegistry.html">CommandRegistry</a>
+      
+    </li>
+  
+  <li class="parent " data-id="topos-playground.cr/ToposPlayground/Env" data-name="toposplayground::env">
+      <a href="ToposPlayground/Env.html">Env</a>
+      
+        <ul>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/DappBackend" data-name="toposplayground::env::dappbackend">
+      <a href="ToposPlayground/Env/DappBackend.html">DappBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/DappFrontend" data-name="toposplayground::env::dappfrontend">
+      <a href="ToposPlayground/Env/DappFrontend.html">DappFrontend</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/ExecutorService" data-name="toposplayground::env::executorservice">
+      <a href="ToposPlayground/Env/ExecutorService.html">ExecutorService</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Env/Secrets" data-name="toposplayground::env::secrets">
+      <a href="ToposPlayground/Env/Secrets.html">Secrets</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/EnvRegistry" data-name="toposplayground::envregistry">
+      <a href="ToposPlayground/EnvRegistry.html">EnvRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Error" data-name="toposplayground::error">
+      <a href="ToposPlayground/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/ErrorLog" data-name="toposplayground::errorlog">
+      <a href="ToposPlayground/ErrorLog.html">ErrorLog</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/Registry" data-name="toposplayground::registry">
+      <a href="ToposPlayground/Registry.html">Registry</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/StderrConsoleFormat" data-name="toposplayground::stderrconsoleformat">
+      <a href="ToposPlayground/StderrConsoleFormat.html">StderrConsoleFormat</a>
+      
+    </li>
+  
+  <li class=" " data-id="topos-playground.cr/ToposPlayground/StdoutConsoleFormat" data-name="toposplayground::stdoutconsoleformat">
+      <a href="ToposPlayground/StdoutConsoleFormat.html">StdoutConsoleFormat</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> ToposPlayground
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="ToposPlayground.html">ToposPlayground</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L17" target="_blank">
+        topos-playground.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/break_text.cr#L1" target="_blank">
+        topos-playground/break_text.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command.cr#L5" target="_blank">
+        topos-playground/command.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/command_registry.cr#L4" target="_blank">
+        topos-playground/command_registry.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/console_format.cr#L4" target="_blank">
+        topos-playground/console_format.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/dispatch.cr#L3" target="_blank">
+        topos-playground/dispatch.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env.cr#L3" target="_blank">
+        topos-playground/env.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env/dapp-backend.cr#L3" target="_blank">
+        topos-playground/env/dapp-backend.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env/dapp-frontend.cr#L3" target="_blank">
+        topos-playground/env/dapp-frontend.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env/executor-service.cr#L3" target="_blank">
+        topos-playground/env/executor-service.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env/secrets.cr#L3" target="_blank">
+        topos-playground/env/secrets.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/env_registry.cr#L3" target="_blank">
+        topos-playground/env_registry.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/error_check.cr#L1" target="_blank">
+        topos-playground/error_check.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/error_log.cr#L1" target="_blank">
+        topos-playground/error_log.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/helptext.cr#L1" target="_blank">
+        topos-playground/helptext.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/initialize_directories.cr#L3" target="_blank">
+        topos-playground/initialize_directories.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/log.cr#L4" target="_blank">
+        topos-playground/log.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/option_parser.cr#L8" target="_blank">
+        topos-playground/option_parser.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/registry.cr#L1" target="_blank">
+        topos-playground/registry.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/version.cr#L1" target="_blank">
+        topos-playground/version.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="HelpText">
+        <strong>HelpText</strong> = <code><span class="s">&quot;\ntopos-playground is a CLI tool which handles all of the orchestration necessary to run local Topos devnets with subnets, a TCE network, and apps.\n\n\nExample Usage\n\n  $ topos-playground start\n    Start the Topos-Playground. This command will output the status of the playground creation to the terminal as it runs, and will log a more detailed status to a log file.\n\n  $ topos-playground start --verbose\n    This will also start the topos playground, but the terminal output as well as the log file output will contain more information.\n    This is useful for debugging if there are errors starting the playground.\n\n  $ topos-playground start -q\n    This will start the topos playground quietly. Most output will be suppressed.\n\n  $ topos-playground clean\n    This will clean the topos playground. It will shut down all containers, and remove all filesystem artifacts except for log files.\n\n  $ topos-playground version\n    This will print the version of the topos playground.\n\n  $ topos-playground version -q&#39;)\n    This will print only the numbers of the topos-playground version, with no other output.\n\nConfiguration\n\n  topos-playground follows the XDG Base Directory Specification, which means that data files for use during runs of the playground are stored in $XDG_DATA_HOME/topos-playground, which defaults to $HOME/.local/share/topos-playground and log files are stored in $XDG_STATE_HOME/topos-playground/logs, which defaults to $HOME/.local/state/topos-playground/logs.\n\n  These locations can be overridden by setting the environment variables HOME, XDG_DATA_HOME, and XDG_STATE_HOME.&quot;</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="VERSION">
+        <strong>VERSION</strong> = <code><span class="o">{{</span> (read_file(<span class="s">&quot;/home/runner/work/topos-playground.cr/topos-playground.cr/src/topos-playground/../../VERSION&quot;</span>)).chomp }}</code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#bind_console_logging%28log_config%29-class-method" class="signature"><strong>.bind_console_logging</strong>(log_config)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#break_line%28lines%2Cline%2Cword%2Cmax_line_length%2Cmax_word_length%2Cindentation%29-class-method" class="signature"><strong>.break_line</strong>(lines, line, word, max_line_length, max_word_length, indentation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#break_text%28str%3AString%2Cmax_line_length%3AInt32%3D80%29%3AString-class-method" class="signature"><strong>.break_text</strong>(str : String, max_line_length : Int32 = <span class="n">80</span>) : String</a>
+        
+          <div class="summary"><p>This is a helper function for nicely formatting the text output from topos-playground.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#calculate_max_word_length%28str%2Cmax_line_length%29-class-method" class="signature"><strong>.calculate_max_word_length</strong>(str, max_line_length)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#command-class-method" class="signature"><strong>.command</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#config-class-method" class="signature"><strong>.config</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#determine_terminal_width-class-method" class="signature"><strong>.determine_terminal_width</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#terminal_width-class-method" class="signature"><strong>.terminal_width</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#terminal_width%3D%28value%3AInt32%29-class-method" class="signature"><strong>.terminal_width=</strong>(value : Int32)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#config%3AConfig-instance-method" class="signature"><strong>#config</strong> : Config</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#config%3D%28config%3AConfig%29-instance-method" class="signature"><strong>#config=</strong>(config : Config)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#dispatch-instance-method" class="signature"><strong>#dispatch</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#error_check-instance-method" class="signature"><strong>#error_check</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_log_file-instance-method" class="signature"><strong>#get_log_file</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#initialize_directories-instance-method" class="signature"><strong>#initialize_directories</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#parse_command_line-instance-method" class="signature"><strong>#parse_command_line</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#run-instance-method" class="signature"><strong>#run</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#setup_all_logging-instance-method" class="signature"><strong>#setup_all_logging</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#setup_console_logging-instance-method" class="signature"><strong>#setup_console_logging</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>
+
+        <a class="method-permalink" href="#new-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L41" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="bind_console_logging(log_config)-class-method">
+      <div class="signature">
+        
+        def self.<strong>bind_console_logging</strong>(log_config)
+
+        <a class="method-permalink" href="#bind_console_logging%28log_config%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/log.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="break_line(lines,line,word,max_line_length,max_word_length,indentation)-class-method">
+      <div class="signature">
+        
+        def self.<strong>break_line</strong>(lines, line, word, max_line_length, max_word_length, indentation)
+
+        <a class="method-permalink" href="#break_line%28lines%2Cline%2Cword%2Cmax_line_length%2Cmax_word_length%2Cindentation%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/break_text.cr#L84" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="break_text(str:String,max_line_length:Int32=80):String-class-method">
+      <div class="signature">
+        
+        def self.<strong>break_text</strong>(str : String, max_line_length : Int32 = <span class="n">80</span>) : String
+
+        <a class="method-permalink" href="#break_text%28str%3AString%2Cmax_line_length%3AInt32%3D80%29%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>This is a helper function for nicely formatting the text output from topos-playground.
+It takes a string and breaks it into lines of a maximum length, inserting newlines
+where necessary. It also attempts to break lines at word boundaries, and to avoid
+breaking lines in the middle of words. It does this by calculating the average word
+length and standard deviation of word length, and using these to determine the maximum
+word length to allow before breaking.</p>
+<p>Words that are longer than the maximum word length (i.e. a word length that is larger
+than typical, and which would thus cause the text appearance to be peculiar, with a
+large end-of-line gap) are broken at a point that is 30-70% of the way through the word,
+using a hyphen. The algorithm also refuses to break a word that starts with a non-letter
+character, to avoid breaking things like directory paths.</p>
+<p>Finally, the algorithm maintains the indetation at the start of a line, when a line is
+broken into multiple lines. This maintains text formatting, such as when examples are
+being provided in an indented section.)</p>
+<p>ameba:disable Metrics/CyclomaticComplexity</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/break_text.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="calculate_max_word_length(str,max_line_length)-class-method">
+      <div class="signature">
+        
+        def self.<strong>calculate_max_word_length</strong>(str, max_line_length)
+
+        <a class="method-permalink" href="#calculate_max_word_length%28str%2Cmax_line_length%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/break_text.cr#L68" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="command-class-method">
+      <div class="signature">
+        
+        def self.<strong>command</strong>
+
+        <a class="method-permalink" href="#command-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/dispatch.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="config-class-method">
+      <div class="signature">
+        
+        def self.<strong>config</strong>
+
+        <a class="method-permalink" href="#config-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="determine_terminal_width-class-method">
+      <div class="signature">
+        
+        def self.<strong>determine_terminal_width</strong>
+
+        <a class="method-permalink" href="#determine_terminal_width-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L37" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="terminal_width-class-method">
+      <div class="signature">
+        
+        def self.<strong>terminal_width</strong>
+
+        <a class="method-permalink" href="#terminal_width-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="terminal_width=(value:Int32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>terminal_width=</strong>(value : Int32)
+
+        <a class="method-permalink" href="#terminal_width%3D%28value%3AInt32%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L33" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="config:Config-instance-method">
+      <div class="signature">
+        
+        def <strong>config</strong> : Config
+
+        <a class="method-permalink" href="#config%3AConfig-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="config=(config:Config)-instance-method">
+      <div class="signature">
+        
+        def <strong>config=</strong>(config : Config)
+
+        <a class="method-permalink" href="#config%3D%28config%3AConfig%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="dispatch-instance-method">
+      <div class="signature">
+        
+        def <strong>dispatch</strong>
+
+        <a class="method-permalink" href="#dispatch-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/dispatch.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="error_check-instance-method">
+      <div class="signature">
+        
+        def <strong>error_check</strong>
+
+        <a class="method-permalink" href="#error_check-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/error_check.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_log_file-instance-method">
+      <div class="signature">
+        
+        def <strong>get_log_file</strong>
+
+        <a class="method-permalink" href="#get_log_file-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/log.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="initialize_directories-instance-method">
+      <div class="signature">
+        
+        def <strong>initialize_directories</strong>
+
+        <a class="method-permalink" href="#initialize_directories-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/initialize_directories.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="parse_command_line-instance-method">
+      <div class="signature">
+        
+        def <strong>parse_command_line</strong>
+
+        <a class="method-permalink" href="#parse_command_line-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/option_parser.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="run-instance-method">
+      <div class="signature">
+        
+        def <strong>run</strong>
+
+        <a class="method-permalink" href="#run-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground.cr#L49" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="setup_all_logging-instance-method">
+      <div class="signature">
+        
+        def <strong>setup_all_logging</strong>
+
+        <a class="method-permalink" href="#setup_all_logging-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/log.cr#L32" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="setup_console_logging-instance-method">
+      <div class="signature">
+        
+        def <strong>setup_console_logging</strong>
+
+        <a class="method-permalink" href="#setup_console_logging-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/wyhaines/topos-playground.cr/blob/80c139cc0605bb0daf7b328f83ece3258d5cf57e/src/topos-playground/log.cr#L28" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
