@@ -19,20 +19,23 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
   MIN_VERSION_GIT    = SemanticVersion.parse("2.0.0")
 
   GIT_REPOS = {
+    # INFRA_REF in the official version
     {
       org:    "topos-protocol",
       repo:   "local-erc20-messaging-infra",
-      branch: "v0.1.6",
+      branch: "v0.1.8",
     },
+    # FRONTEND_REF in the official version
     {
       org:    "topos-protocol",
       repo:   "dapp-frontend-erc20-messaging",
-      branch: "v0.1.4",
+      branch: "v0.1.6",
     },
+    # EXECUTOR_SERVICE_REF in the official version
     {
       org:    "topos-protocol",
       repo:   "executor-service",
-      branch: "v0.2.0",
+      branch: "v0.2.1",
     },
   }
 
