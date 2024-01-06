@@ -9,12 +9,11 @@ class ToposPlayground
     def content
       <<-EENV.gsub(/\$(\w+)/) { |var| ENV[var]?.to_s }
       VITE_EXECUTOR_SERVICE_ENDPOINT=http://localhost:3000
-      VITE_TOPOS_SUBNET_ENDPOINT=localhost:10002
-      VITE_ELASTIC_APM_ENDPOINT=http://example.com
-      # VITE_TRACING_OTEL_COLLECTOR_ENDPOINT=https://otel-collector.telemetry.devnet-1.topos.technology/v1/traces
-      VITE_TRACING_SERVICE_NAME=dapp-frontend-erc20-messaging
-      VITE_TRACING_SERVICE_VERSION=topos-playground
-      #VITE_TRACING_SERVICE_VERSION=0.1.0
+      VITE_TOPOS_SUBNET_ENDPOINT_HTTP=http://localhost:10002
+      VITE_TOPOS_SUBNET_ENDPOINT_WS=ws://localhost:10002/ws
+      VITE_OTEL_EXPORTER_OTLP_ENDPOINT=http://example.com
+      VITE_OTEL_SERVICE_NAME=dapp-frontend-erc20-messaging
+      VITE_OTEL_SERVICE_VERSION=topos-playground
 
       # Addresses
       VITE_TOPOS_CORE_PROXY_CONTRACT_ADDRESS=$TOPOS_CORE_PROXY_CONTRACT_ADDRESS
