@@ -1,0 +1,140 @@
+require "../command"
+
+class ToposPlayground::Command::Stop < ToposPlayground::Command
+  def self.options(parser, config)
+    parser.on("stop", "Shut down Playground docker containers") do
+      config.command = "stop"
+      parser.on("--no-delete", "Do not delete the working directory") do
+        config.do_not_delete_working_dir = true
+      end
+    end
+  end
+
+  def self.levenshtein_options
+    {
+      "stop" => {} of String => Array(String),
+    }
+  end
+
+  def self.log_to_file?(config)
+    true
+  end
+
+  def run
+    Log.for("stdout").info { "Cleaning up Topos-Playground...\n" }
+
+    verify_working_directory
+    verify_execution_path
+    shutdown_erc20_messagine_protocol_infra
+    shutdown_redis
+    completion_banner
+  end
+
+  def verify_working_directory
+    if File.exists?("#{config.working_dir}") && File.directory?("#{config.working_dir}") && File.writable?("#{config.working_dir}")
+      if Dir["#{config.working_dir}/*"].empty?
+        Log.for("stdout").info { "✅ Working directory (#{config.working_dir}) is empty" }
+      else
+        Log.for("stdout").info { "✅ Found working directory (#{config.working_dir})" }
+      end
+      config.working_dir_exists = true
+    else
+      if !File.exists?("#{config.working_dir}")
+        Log.for("stdout").info { "✅ Working directory (#{config.working_dir}) does not exist. Perhaps it was already cleaned?" }
+      elsif !File.directory?("#{config.working_dir}")
+        Error.error { "Working directory (#{config.working_dir}) is not a directory. Can not continue!" }
+        exit 1
+      else # It must not be writeable.
+        Error.error { "Working directory (#{config.working_dir}) is not writable. Please check permissions." }
+        exit 1
+      end
+      config.working_dir_exists = false
+    end
+  end
+
+  def verify_execution_path
+    if File.exists?("#{config.execution_path}") && File.directory?("#{config.execution_path}") && File.readable?("#{config.execution_path}")
+      if Dir["#{config.execution_path}/*"].empty?
+        Log.for("stdout").info { "✅ Execution path (#{config.execution_path}) is empty\n" }
+      else
+        Log.for("stdout").info { "✅ Found execution path (#{config.execution_path})\n" }
+      end
+      config.execution_path_exists = true
+    else
+      if !File.exists?("#{config.execution_path}")
+        Log.for("stdout").info { "✅ Execution path (#{config.execution_path}) does not exist. Can not shut down any running containers.\n" }
+      elsif !File.directory?("#{config.execution_path}")
+        Error.error { "Execution path (#{config.execution_path}) is not a directory. Can not continue!" }
+        exit 1
+      else # It must not be writeable.
+        Error.error { "Execution path (#{config.execution_path}) is not writable. Please check permissions." }
+        exit 1
+      end
+      config.execution_path_exists = false
+    end
+  end
+
+  def shutdown_erc20_messagine_protocol_infra
+    if config.execution_path_exists
+      Log.for("stdout").info { "Shutting down ERC20 messaging protocol infrastructure..." }
+      shutdown_docker_compose
+    else
+      Log.for("stdout").info { "✅ ERC20 messaging infra is not running; subnets & TCE are down\n" }
+    end
+  end
+
+  private def shutdown_docker_compose
+    command = "docker compose down -v"
+    status, output = run_process(
+      command,
+      config.execution_path.to_s)
+    if status.success?
+      Log.for("stdout").info { "✅ subnets & TCE are down" }
+    else
+      Error.error { "Failed to shut down ERC20 messaging protocol infrastructure: #{output}" }
+      exit 1
+    end
+  rescue ex
+    Error.error { "Failed to shut down ERC20 messaging protocol infrastructure (#{config.execution_path}): #{ex}" }
+    exit 1
+  end
+
+  def shutdown_redis
+    redis_container_name = "redis-stack-server"
+    status, output = run_process("docker ps --format '{{.Names}}'")
+    if status.success?
+      if output.to_s.includes?(redis_container_name)
+        Log.for("stdout").info { "Shutting down the redis container..." }
+        command = "docker rm -f #{redis_container_name}"
+        status, output = run_process(command)
+
+        if status.success?
+          Log.for("stdout").info { "✅ redis is down\n" }
+        else
+          Error.error { "Failed to shut down redis: #{output}\n" }
+        end
+      else
+        Log.for("stdout").info { "✅ redis is not running\n" }
+      end
+    else
+      Error.error { "Failed to identify the redis container: #{output}" }
+    end
+  rescue ex
+    puts ex
+    Error.error { "Failed to identify the redis container: #{ex}" }
+    exit 1
+  end
+
+  def completion_banner
+    banner = <<-EBANNER
+
+    🔥 The Topos Playground is stopped 🔥
+
+    ❗Important❗
+    Before starting the Topos Playground again, you must reset your MetaMask Account Data for each subnet (both Topos and Incal) in order to reset the nonce count. Refer to "https://support.metamask.io/hc/en-us/articles/360015488891-How-to-clear-your-account-activity-reset-account" for more information.
+
+    EBANNER
+
+    Log.for("stdout").info { banner }
+  end
+end

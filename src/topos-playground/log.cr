@@ -4,7 +4,7 @@ require "./console_format"
 class ToposPlayground
   @@log_file = nil
 
-  def get_log_file
+  def log_file
     (@@log_file ||= File.new(config.log_file_path.as(String), "a+")).as(File)
   end
 
@@ -26,7 +26,7 @@ class ToposPlayground
   end
 
   def setup_console_logging
-    Log.setup { |c| ToposPlayground.bind_console_logging(c) }
+    Log.setup { |console| ToposPlayground.bind_console_logging(console) }
   end
 
   def setup_all_logging
@@ -38,13 +38,13 @@ class ToposPlayground
       Log.builder.bind(
         "stdout", :trace,
         Log::IOBackend.new(
-          get_log_file,
+          log_file,
           dispatcher: Log::DirectDispatcher))
       Log.builder.bind(
         "error",
         :debug,
         Log::IOBackend.new(
-          get_log_file,
+          log_file,
           dispatcher: Log::DirectDispatcher))
     end
   end

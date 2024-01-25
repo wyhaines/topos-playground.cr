@@ -1,5 +1,5 @@
 name: topos-playground.cr
-version: 0.3.0
+version: 0.3.1
 
 authors:
   - Kirk Haines <wyhaines@gmail.com>
@@ -29,4 +29,4 @@ dependencies:
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
-    version: ~> 1.6.0
+    version: ~> 1.6.1
