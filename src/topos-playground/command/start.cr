@@ -232,8 +232,8 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
         if File.exists?(filename)
           Log.for("stdout").info { "✅ #{filename} already exists" }
         else
-          File.open(filename, "w+") do |fh|
-            fh.write content.to_slice
+          File.open(filename, "w+") do |file_handle|
+            file_handle.write content.to_slice
           end
           Log.for("stdout").info { "✅ #{filename} file successfully created" }
           Fiber.yield
@@ -284,26 +284,26 @@ class ToposPlayground::Command::Start < ToposPlayground::Command
 
     File.open(
       sub_working_dir(EnvRegistry["dappfrontend"].new.path),
-      "a+") do |fh|
-      fh.puts "VITE_SUBNET_REGISTRATOR_CONTRACT_ADDRESS=#{env_hash["SUBNET_REGISTRATOR_CONTRACT_ADDRESS"]}"
-      fh.puts "VITE_TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
-      fh.puts "VITE_ERC20_MESSAGING_CONTRACT_ADDRESS=#{env_hash["ERC20_MESSAGING_CONTRACT_ADDRESS"]}"
+      "a+") do |file_handle|
+      file_handle.puts "VITE_SUBNET_REGISTRATOR_CONTRACT_ADDRESS=#{env_hash["SUBNET_REGISTRATOR_CONTRACT_ADDRESS"]}"
+      file_handle.puts "VITE_TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
+      file_handle.puts "VITE_ERC20_MESSAGING_CONTRACT_ADDRESS=#{env_hash["ERC20_MESSAGING_CONTRACT_ADDRESS"]}"
     end
     Log.for("stdout").info { "✅ Contract addresses successfully written to #{sub_working_dir(EnvRegistry["dappfrontend"].new.path)}" }
 
     File.open(
       sub_working_dir(EnvRegistry["executorservice"].new.path),
-      "a+") do |fh|
-      fh.puts "SUBNET_REGISTRATOR_CONTRACT_ADDRESS=#{env_hash["SUBNET_REGISTRATOR_CONTRACT_ADDRESS"]}"
-      fh.puts "TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
+      "a+") do |file_handle|
+      file_handle.puts "SUBNET_REGISTRATOR_CONTRACT_ADDRESS=#{env_hash["SUBNET_REGISTRATOR_CONTRACT_ADDRESS"]}"
+      file_handle.puts "TOPOS_CORE_PROXY_CONTRACT_ADDRESS=#{env_hash["TOPOS_CORE_PROXY_CONTRACT_ADDRESS"]}"
     end
     Log.for("stdout").info { "✅ Contract addresses successfully written to #{sub_working_dir(EnvRegistry["executorservice"].new.path)}" }
   end
 
   def parse_contract_addresses_to_hash(filename)
     result = {} of String => String
-    File.open(filename, "r") do |fh|
-      fh.each_line do |line|
+    File.open(filename, "r") do |file_handle|
+      file_handle.each_line do |line|
         next if line.strip.empty?
         matches = line.gsub(/export\s+/, "").split(/=/)
         result[matches[0]] = matches[1]
