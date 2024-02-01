@@ -88,8 +88,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
+#            ./artifacts/topos-playground-darwin-macos13/topos-playground-darwin-macos13.zip
           files: |
             ./artifacts/topos-playground-darwin/topos-playground-darwin.zip
-#            ./artifacts/topos-playground-darwin-macos13/topos-playground-darwin-macos13.zip
             ./artifacts/topos-playground-linux-x86_64/topos-playground-linux-x86_64.gz
           token: ${{ secrets.GITHUB_TOKEN }}
