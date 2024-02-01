@@ -29,12 +29,16 @@ jobs:
           path: ./topos-playground-darwin.zip
 
   build-macos-13:
-    runs-on: macos-14
+    runs-on: macos-13
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Brew Update
+        run: brew update
+      - name: Install OpenSSL
+        run: brew install openssl
       - name: Install Crystal
-        run: brew install openssl crystal
+        run: brew install crystal
       - name: Install dependencies
         run: shards install
       - name: Build the binary
