@@ -76,7 +76,8 @@ jobs:
           path: ./bin/topos-playground-linux-x86_64.gz
 
   release:
-    needs: [build-macos, build-linux, build-macos-13]
+    #needs: [build-macos, build-linux, build-macos-13]
+    needs: [build-macos, build-linux]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
@@ -89,6 +90,6 @@ jobs:
         with:
           files: |
             ./artifacts/topos-playground-darwin/topos-playground-darwin.zip
-            ./artifacts/topos-playground-darwin-macos13/topos-playground-darwin-macos13.zip
+#            ./artifacts/topos-playground-darwin-macos13/topos-playground-darwin-macos13.zip
             ./artifacts/topos-playground-linux-x86_64/topos-playground-linux-x86_64.gz
           token: ${{ secrets.GITHUB_TOKEN }}
