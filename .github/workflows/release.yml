@@ -38,7 +38,7 @@ jobs:
       - name: Install OpenSSL
         run: brew install openssl
       - name: Install Crystal
-        run: brew install crystal
+        run: brew install --overwrite crystal
       - name: Install dependencies
         run: shards install
       - name: Build the binary
