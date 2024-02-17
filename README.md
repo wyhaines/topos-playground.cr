@@ -86,7 +86,7 @@ By default, topos-playground sends output to both your console and to a log file
 $ topos-playground clean --quiet
 ```
 
-For more in-depth discussion about the playground components, and what the `topos-playground` is doing, take a look at the [Topos Playground components](https://docs.topos.technology/content/module-2/3-components.html) portion of the Topos Developer Portal.
+For more in-depth discussion about the playground components, and what the `topos-playground` is doing, take a look at the [Topos Playground components](https://docs.topos.technology/content/module-2/3-topos-playground.html#components-in-depth) portion of the Topos Developer Portal.
 
 ### Development
 
