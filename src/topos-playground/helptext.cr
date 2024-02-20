@@ -30,5 +30,9 @@ class ToposPlayground
       topos-playground follows the XDG Base Directory Specification, which means that data files for use during runs of the playground are stored in $XDG_DATA_HOME/topos-playground, which defaults to $HOME/.local/share/topos-playground and log files are stored in $XDG_STATE_HOME/topos-playground/logs, which defaults to $HOME/.local/state/topos-playground/logs.
 
       These locations can be overridden by setting the environment variables HOME, XDG_DATA_HOME, and XDG_STATE_HOME.
+
+    Component Versions
+
+      #{ToposPlayground::Command::Init::GIT_REPOS.map {|data| "#{data[:repo]}: #{data[:branch]}"}.join("\n  ")} 
     EHELP
 end
