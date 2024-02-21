@@ -266,7 +266,7 @@ class ToposPlayground::Command::Start < ToposPlayground::Command::Init
   # is triggered by the `topos-playground` process exiting, such as when `ctrl-c` is
   # pressed.
   def wait_for(background_processes)
-    # TODO: Have a command line flag so that the CLI _does not_ block on the
+    # Note to myself: Have a command line flag so that the CLI _does not_ block on the
     # execution of the executor or the dapp frontend. Also add a cleanup
     # phase to reap any executor or dapp frontend that may be running
 

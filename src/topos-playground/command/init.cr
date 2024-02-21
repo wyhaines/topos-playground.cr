@@ -56,8 +56,6 @@ class ToposPlayground::Command::Init < ToposPlayground::Command
   end
 
   def run
-    background_processes = [] of Tuple(Channel(Bool), Channel(String), Process)
-
     Log.for("stdout").info { "Initializing the Topos-Playground...\n" }
 
     verify_dependency_installation
@@ -180,7 +178,7 @@ class ToposPlayground::Command::Init < ToposPlayground::Command
         update_repository(repo_path)
       else
         Log.for("stdout").info { "Cloning #{repo[:org]}/#{repo[:repo]}..." }
-        status, _ = run_process("rm -rf #{repo_path}")
+        _, _ = run_process("rm -rf #{repo_path}")
         status, _ = run_process("git clone --depth 1 #{repo[:branch] ? "--branch #{repo[:branch]}" : ""} https://github.com/#{repo[:org]}/#{repo[:repo]}.git #{repo_path}")
         if status.success?
           Log.for("stdout").info { "✅ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} successfully cloned" }
