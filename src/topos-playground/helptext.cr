@@ -33,6 +33,6 @@ class ToposPlayground
 
     Component Versions
 
-      #{ToposPlayground::Command::Init::GIT_REPOS.map {|data| "#{data[:repo]}: #{data[:branch]}"}.join("\n  ")} 
+      #{ToposPlayground::Command::Init::GIT_REPOS.map { |data| "#{data[:repo]}: #{data[:branch]}" }.join("\n  ")}
     EHELP
 end

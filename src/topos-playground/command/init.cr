@@ -139,13 +139,27 @@ class ToposPlayground::Command::Init < ToposPlayground::Command
     exit 1
   end
 
+  def git_tag_matches?(repo_path, branch)
+    status, output = run_process("git describe --tags --exact-match", repo_path)
+    if status.success?
+      return output.to_s.strip == branch
+    end
+
+    status, output = run_process("git rev-parse --abbrev-ref HEAD", repo_path)
+    if status.success?
+      return output.to_s.strip == branch
+    end
+
+    false
+  end
+
   def validate_git_cache
     Log.for("stdout").info { "" }
     Log.for("stdout").info { "Validating git cache for offline use..." }
     GIT_REPOS.each do |repo|
       repo_path = File.join(config.cache_dir.to_s, repo[:repo])
 
-      if Dir.exists?(repo_path)
+      if Dir.exists?(repo_path) && git_tag_matches?(repo_path, repo[:branch])
         Log.for("stdout").info { "✅ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} is cached" }
       else
         Log.for("stdout").info { "❌ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} not found in cache" }
@@ -161,11 +175,12 @@ class ToposPlayground::Command::Init < ToposPlayground::Command
     GIT_REPOS.each do |repo|
       repo_path = File.join(config.cache_dir.to_s, repo[:repo])
 
-      if Dir.exists?(repo_path)
+      if Dir.exists?(repo_path) && git_tag_matches?(repo_path, repo[:branch])
         Log.for("stdout").info { "✅ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} already cloned" }
         update_repository(repo_path)
       else
         Log.for("stdout").info { "Cloning #{repo[:org]}/#{repo[:repo]}..." }
+        status, _ = run_process("rm -rf #{repo_path}")
         status, _ = run_process("git clone --depth 1 #{repo[:branch] ? "--branch #{repo[:branch]}" : ""} https://github.com/#{repo[:org]}/#{repo[:repo]}.git #{repo_path}")
         if status.success?
           Log.for("stdout").info { "✅ #{repo[:repo]}#{repo[:branch] ? " | #{repo[:branch]}" : ""} successfully cloned" }
